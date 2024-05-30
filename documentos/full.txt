@@ -1,0 +1,142 @@
+@startuml
+
+' relaciones del modulo de autenticacion
+
+Group --o User 
+Group --o Permission 
+Login ..> Group
+Login_Form ..> Login :(dependencia)
+
+' Relaciones de inventario 
+
+Inventario --o Apartado 
+Inventario --o Producto 
+Almacen --* Alerta
+Ventas ..> Inventario 
+Almacen ..> Inventario
+
+' Relaciones de herencia para modelos (BD)
+Group <-- Model
+User <-- Model
+Apartado <-- Model
+Producto <-- Model
+
+'Relaciones de herencia para vistas 
+Login <-- View
+Almacen <-- View
+Ventas <-- View
+
+
+class User{
+  -id AutoField
+  -password CharField
+  -username CharField
+  -phone_number CharField
+  -email EmailField
+  -curp CharField
+  -address CharField
+
+  @has_perm(user, "can_access_Users")
+  setId()
+  setPassword()
+  setUsername()
+  setPhone_number()
+  setEmail()
+  setAddress()
+  getId()
+  getPassword()
+  getUsername()
+  getPhone_number()
+  getEmail()
+  getAddress()
+  getUsers()
+}
+
+class Group{
+  -permissions ManyToManyField(Permission)
+  -users ManyToManyField(User)
+  -role CharField
+  
+  authenticate()
+  @has_perm(user, "can_access_Group")
+  setPermissions()
+  addPermission()
+  removePermission()
+  clearPermissions()
+  getUsersPermissionsAndRoles()
+}
+
+class Permission{
+  name CharField
+  description CharField
+}
+
+class Login_Form{
+  data input
+  message
+  input(request)
+}
+
+class Login{
+  resolveRequest(request)
+}
+
+class Inventario{
+  -logHistory FileField
+  -productos ManyToManyField(Producto)
+  -apartado ForeignKey(Apartado)
+  @has_perm(user, "can_access_Inventario")
+  altaProducto(int productID, int units, DateTimeField date)
+  bajaProducto(int productID, int units, DateTimeField date)
+  checkDisponibilidad(int productID, int units)
+  consultarHistorial(string criteria)
+  getNombreProducto(int productID)
+  getPrecioProducto(int productID)
+}
+
+class Apartado{
+  -id AutoField
+  -productos ManyToManyField(Producto)
+  -titular CharField
+  @has_perm(user, "can_access_Apartado")
+  apartar()
+  cancelarApartado()
+  finalizarApartado()
+}
+
+class Producto{
+  -name CharField
+  -price DecimalField
+  -id AutoField
+  -quantity IntegerField
+
+  @has_perm(user, "can_access_Producto")
+  setNombre()
+  setPrecio()
+  setCantidad()
+  getNombre()
+  getPrecio()
+  getId()
+  getCantidad()
+}
+
+class Ventas{
+  @has_perm(user, "can_access_Venta")
+  resolveRequest(request)
+  getInfoProducto()
+  completarVenta()
+}
+
+class Almacen{
+  @has_perm(user, "can_access_Almacen")
+  resolveRequest(request)
+  obtenerProductos(int quantity)
+  obtenerProductosCriterio(int quantity,string criteria)
+  verificarInventario()
+}
+
+class Alerta{
+ generarAlerta()
+ enviarAlerta()
+}
+@enduml
