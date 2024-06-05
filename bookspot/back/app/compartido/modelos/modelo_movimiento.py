@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from core.base import Base
-from modelo_libro import Libro
-from modelo_tipo_movimiento import TipoMovimiento
-from modelo_usuario import Usuario
+from compartido.modelos.modelo_libro import Libro
+from compartido.modelos.modelo_tipo_movimiento import TipoMovimiento
+from compartido.modelos.modelo_usuario import Usuario
 
 class Movimiento(Base):
     __tablename__ = 'movimiento'

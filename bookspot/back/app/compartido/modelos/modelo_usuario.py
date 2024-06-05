@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from core.base import Base
-from modelo_grupo import Grupo
+from compartido.modelos.modelo_grupo import Grupo
 
 class Usuario(Base):
     __tablename__ = 'usuario'

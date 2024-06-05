@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from core.base import Base
-from modelo_venta import Venta
-from modelo_libro import Libro
+from compartido.modelos.modelo_venta import Venta
+from compartido.modelos.modelo_libro import Libro
 
 class DetalleVenta(Base):
     __tablename__ = 'detalle_venta'

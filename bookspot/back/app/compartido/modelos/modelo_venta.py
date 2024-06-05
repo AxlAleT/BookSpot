@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, Float, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from core.base import Base
-from modelo_usuario import Usuario
+from compartido.modelos.modelo_usuario import Usuario
 
 class Venta(Base):
     __tablename__ = 'venta'

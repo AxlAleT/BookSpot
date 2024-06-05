@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
 from core.base import Base
 
 class TipoMovimiento(Base):
