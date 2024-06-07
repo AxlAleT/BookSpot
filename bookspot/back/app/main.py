@@ -1,4 +1,3 @@
-from core.crearBD import crearBD
+from core.crear_bd import  crear_tablas
 
-crearBD()
-
+crear_tablas()
