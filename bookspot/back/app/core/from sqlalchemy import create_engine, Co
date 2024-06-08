@@ -1,0 +1,55 @@
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+# Crear una instancia de la base de datos
+engine = create_engine('sqlite:///:memory:', echo=True)
+Base = declarative_base()
+
+# Definir el modelo de User
+class User(Base):
+    __tablename__ = 'users'
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    age = Column(Integer)
+
+# Crear la tabla
+Base.metadata.create_all(engine)
+
+# Crear una sesión
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# Crear un nuevo usuario
+new_user = User(name='Axel', age=30)
+session.add(new_user)
+session.commit()
+
+# Leer todos los usuarios
+users = session.query(User).all()
+for user in users:
+    print(user.id, user.name, user.age)
+
+# Leer un usuario específico por nombre
+user = session.query(User).filter_by(name='Axel').first()
+if user != None:
+    print(user.id, user.name, user.age)
+
+# Actualizar la edad de un usuario
+user_to_update = session.query(User).filter_by(name='Axel').first()
+user_to_update.age = 31
+session.commit()
+
+# Verificar la actualización
+updated_user = session.query(User).filter_by(name='Axel').first()
+print(updated_user.id, updated_user.name, updated_user.age)
+
+# Eliminar un usuario
+user_to_delete = session.query(User).filter_by(name='Axel').first()
+session.delete(user_to_delete)
+session.commit()
+
+# Verificar la eliminación
+deleted_user = session.query(User).filter_by(name='Axel').first()
+print(deleted_user)  # Debería ser None

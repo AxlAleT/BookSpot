@@ -4,10 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const productCodeInput = document.getElementById('product-code');
 
     // Placeholder for product data (to be fetched from API or database in future)
-    const products = [
-        { name: 'Libro 1', code: '001', price: 10.00, quantity: 1 },
-        { name: 'Libro 2', code: '002', price: 15.50, quantity: 2 }
-    ];
+    let products = [];
 
     // Function to render products in the table
     function renderProducts() {
@@ -15,10 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
         products.forEach((product, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${product.name}</td>
-                <td>${product.code}</td>
-                <td>${product.price.toFixed(2)}</td>
-                <td><input type="number" value="${product.quantity}" min="1" class="form-control quantity-input" data-index="${index}"></td>
+                <td>${product.titulo}</td>
+                <td>${product.id_libro}</td>
+                <td>${product.precio.toFixed(2)}</td>
+                <td><input type="number" value="${product.cantidad}" min="1" class="form-control quantity-input" data-index="${index}"></td>
                 <td>
                     <button class="btn btn-danger btn-sm delete-button" data-index="${index}">Eliminar</button>
                 </td>
@@ -26,6 +23,44 @@ document.addEventListener('DOMContentLoaded', () => {
             productTableBody.appendChild(row);
         });
     }
+
+    // Function to fetch product data from the API
+    async function fetchProductData(id_libro, cantidad) {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/ventas/get_libro/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ items: [{ id_libro, cantidad }] })
+            });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching product data:', error);
+        }
+    }
+    
+
+    // Event listener for product code input (simulating a product scan)
+    productCodeInput.addEventListener('keypress', async (event) => {
+        if (event.key === 'Enter') {
+            const id_libro = parseInt(productCodeInput.value);
+            const cantidad = 1; // Default quantity for a new product
+
+            const productData = await fetchProductData(id_libro, cantidad);
+            if (productData) {
+                products.push({ ...productData, cantidad });
+                renderProducts();
+                productCodeInput.value = ''; // Clear the input
+            } else {
+                alert('Producto no encontrado o no hay suficiente stock');
+            }
+        }
+    });
 
     // Event listener for delete buttons
     productTableBody.addEventListener('click', (event) => {
@@ -42,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const index = event.target.getAttribute('data-index');
             const newQuantity = parseInt(event.target.value);
             if (newQuantity > 0) {
-                products[index].quantity = newQuantity;
+                products[index].cantidad = newQuantity;
             }
         }
     });

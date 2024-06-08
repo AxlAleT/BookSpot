@@ -1,16 +1,21 @@
-from core.base import Base
-from sqlalchemy import Column, Integer, String, Float
-from sqlalchemy.orm import relationship
+from app import db
 
-class Libro(Base):
-    __tablename__ = 'libros'
-    id_libro = Column(Integer, primary_key=True)
-    titulo = Column(String, nullable=False)
-    autor = Column(String)
-    editorial = Column(String)
-    cantidad = Column(Integer)
-    precio = Column(Float)
-    detalles_venta = relationship("DetalleVenta", back_populates="libro")
-    detalles_apartado = relationship("DetalleApartado", back_populates="libro")
-    movimientos = relationship("Movimiento", back_populates="libro")
+class Libro(db.Model):
 
+    id = db.Column(db.Integer, primary_key=True)
+    titulo = db.Column(db.String(100), nullable=False)
+    precio = db.Column(db.Float, nullable=False)
+    available_quantity = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, titulo, precio, available_quantity):
+        self.titulo = titulo
+        self.precio = precio
+        self.available_quantity = available_quantity
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'titulo': self.titulo,
+            'precio': self.precio,
+            'available_quantity': self.available_quantity
+        }

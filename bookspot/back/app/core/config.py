@@ -1,6 +1,4 @@
-
-class Settings():
-    database_url: str = "sqlite:///base.db"
-    secret_key: str = "Revisar"
-
-settings = Settings()
+class Config:
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///test.db'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = 'your_secret_key'

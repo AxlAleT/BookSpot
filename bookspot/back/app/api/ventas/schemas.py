@@ -1,18 +1,17 @@
-from pydantic import BaseModel
-from typing import List
+from marshmallow import Schema, fields
 
-class BookItem(BaseModel):
-    book_id: int
-    quantity: int
+class LibroItemSchema(Schema):
+    id_libro = fields.Int(required=True)
+    cantidad = fields.Int(required=True)
 
-class BookResponse(BaseModel):
-    title: str
-    id: int
-    price: float
-    quantity: int
+class LibroResponseSchema(Schema):
+    titulo = fields.Str(required=True)
+    id_libro = fields.Int(required=True)
+    precio = fields.Float(required=True)
+    cantidad = fields.Int(required=True)
 
-class SaleRequest(BaseModel):
-    items: List[BookItem]
+class VentaRequestSchema(Schema):
+    items = fields.List(fields.Nested(LibroItemSchema), required=True)
 
-class SaleResponse(BaseModel):
-    books: List[BookResponse]
+class VentaResponseSchema(Schema):
+    books = fields.List(fields.Nested(LibroResponseSchema), required=True)
