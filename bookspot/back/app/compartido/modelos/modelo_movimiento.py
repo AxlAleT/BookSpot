@@ -7,8 +7,8 @@ class Movimiento(db.Model):
     id_movimiento = db.Column(db.Integer, primary_key=True)
     id_tipo_movimiento = db.Column(db.Integer, db.ForeignKey('tipo_movimiento.id_tipo_movimiento'))
     fecha_hora = db.Column(db.DateTime)
-    tipo_movimiento = db.relationship("TipoMovimiento", back_populates="movimientos")
 
+    tipo_movimiento = db.relationship("TipoMovimiento", back_populates="movimientos")
     detalles = db.relationship("DetallesMovimiento", back_populates="movimiento")
 
     def __init__(self, id_tipo_movimiento, fecha_hora):

@@ -2,7 +2,10 @@ from flask import Blueprint, request, jsonify
 from .schemas import LibroResponseSchema, VentaRequestSchema
 from app.compartido.modelos.modelo_libro import Libro
 from app import db
-from app.compartido.excepciones.excepciones_libro import BookNotFoundException, NotEnoughStockException, InvalidRequestException
+import datetime
+from app.compartido.modelos.modelo_movimiento import Movimiento, DetallesMovimiento, TipoMovimiento
+from app.compartido.excepciones.excepciones_libro import InvalidRequestException, BookNotFoundException, NotEnoughStockException
+
 
 ventas_bp = Blueprint('ventas', __name__)
 
@@ -40,6 +43,7 @@ def get_libro():
     except (InvalidRequestException, BookNotFoundException, NotEnoughStockException) as e:
         return e.response
     
+
 @ventas_bp.route('/completar/', methods=['PATCH'])
 def completar():
     request_data = request.json
@@ -54,6 +58,21 @@ def completar():
         # Obtener los elementos del pedido
         items = request_data.get('items')
 
+        # Crear una nueva entrada en la tabla Movimiento
+        tipo_movimiento_vpv = TipoMovimiento.query.filter_by(nombre='VPV').first()
+        if not tipo_movimiento_vpv:
+            raise InvalidRequestException()
+        
+        nuevo_movimiento = Movimiento(
+            id_tipo_movimiento=tipo_movimiento_vpv.id_tipo_movimiento,
+            fecha_hora=datetime.datetime.now(datetime.UTC)
+        )
+        db.session.add(nuevo_movimiento)
+        db.session.commit()  # Commit para obtener el ID del movimiento
+        
+        # Obtener el ID del movimiento recién creado
+        id_movimiento = nuevo_movimiento.id_movimiento
+
         for item in items:
             libro_id = item.get('id_libro')
             cantidad = item.get('cantidad')
@@ -67,6 +86,14 @@ def completar():
             
             # Actualizar la cantidad disponible del libro
             libro.available_quantity -= cantidad
+
+            # Crear una entrada en la tabla DetallesMovimiento
+            nuevo_detalle = DetallesMovimiento(
+                id_movimiento=id_movimiento,
+                id_libro=libro_id,
+                cantidad=cantidad
+            )
+            db.session.add(nuevo_detalle)
         
         # Confirmar los cambios en la base de datos
         db.session.commit()
@@ -76,6 +103,9 @@ def completar():
     except (InvalidRequestException, BookNotFoundException, NotEnoughStockException) as e:
         db.session.rollback()  # Deshacer cualquier cambio en caso de error
         return e.response, 400
+    except Exception as e:
+        db.session.rollback()  # Deshacer cualquier cambio en caso de error general
+        return jsonify({"error": str(e)}), 500
 
 
 def validate_request(request_data):
