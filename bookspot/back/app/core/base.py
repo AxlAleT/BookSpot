@@ -1,6 +1,9 @@
 from app import db
-from app import db
 from app.compartido.modelos.modelo_libro import Libro
+from app.compartido.modelos.modelo_movimiento import Movimiento, TipoMovimiento, DetallesMovimiento
+from .config import Config
+
+config = Config()
 
 def init_db():
     db.create_all()
@@ -26,3 +29,12 @@ def populate_books():
     
     db.session.commit()
     print("Books have been added to the database.")
+
+
+def init_tipos_movimiento():
+    for tipo_data in config.TIPOS_MOVIMIENTO:
+        tipo_existente = TipoMovimiento.query.filter_by(nombre=tipo_data['nombre']).first()
+        if not tipo_existente:
+            nuevo_tipo = TipoMovimiento(nombre=tipo_data['nombre'], descripcion=tipo_data['descripcion'])
+            db.session.add(nuevo_tipo)
+    db.session.commit()
