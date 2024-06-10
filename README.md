@@ -7,3 +7,6 @@
     Activar el venv 
     ejecutar el sig. comando:
     pip install -r requirements.txt
+
+# probar primero  
+    pip install -r requirements.txt
