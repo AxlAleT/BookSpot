@@ -1,42 +1,60 @@
+/* Estilos personalizados */
+
 body {
-    background-color: #ffffff; /* Blanco cálido */
-    color: #5d4037;
+    background-color: #f8f9fa; /* Fondo gris claro */
+    color: #343a40; /* Texto negro */
+    font-family: Arial, sans-serif; /* Fuente */
 }
 
-.navbar-light .navbar-toggler {
-    border-color: rgba(255, 152, 0, 0.5);
+.navbar {
+    background-color: #007bff; /* Azul */
 }
 
 .navbar-brand {
-    color: #ff7043;
+    color: #ffffff; /* Texto blanco */
+    font-size: 1.5rem; /* Tamaño de fuente más grande */
 }
 
-.text-warm {
-    color: #ff7043;
+.navbar-nav .nav-link {
+    color: #ffffff; /* Texto blanco */
 }
 
-.bg-warm {
-    background-color: #ffe48a; /* Durazno */
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.card {
+    margin-bottom: 20px; /* Espacio inferior entre tarjetas */
 }
 
-.table-fixed {
-    display: block;
-    max-height: 400px;
-    overflow-y: auto;
-    width: 100%;
+.card-header {
+    background-color: #007bff; /* Azul */
+    color: #ffffff; /* Texto blanco */
 }
 
-.table-fixed thead,
-.table-fixed tbody {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
+.list-group-item {
+    background-color: #f8f9fa; /* Fondo gris claro */
+    border: none; /* Sin borde */
 }
 
-.table-fixed tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
+.list-group-item a {
+    color: #343a40; /* Texto negro */
+}
+
+.container {
+    margin-top: 20px; /* Espacio superior */
+}
+
+/* Estilos para la tabla */
+.table {
+    background-color: #ffffff; /* Fondo blanco */
+}
+
+.table th,
+.table td {
+    border: 1px solid #dee2e6; /* Borde gris claro */
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8f9fa; /* Fondo gris claro en filas impares */
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #ffffff; /* Fondo blanco en filas pares */
 }
