@@ -19,6 +19,8 @@ def create_app():
 
     from app.api.ventas.router import ventas_bp
     app.register_blueprint(ventas_bp, url_prefix='/ventas')
+    from app.api.inventario.router import libros_bp
+    app.register_blueprint(libros_bp, url_prefix='/inventario')
 
     # Registrar otros blueprints de la misma manera
     # from app.api.inventario.router import inventario_bp
