@@ -1,0 +1,91 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: orange;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 0 10px 10px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+.profile {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-picture {
+    width: 170px; /* Tamaño del contenedor de la imagen */
+    height: 170px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid orange; /* Borde del contenedor */
+}
+
+.profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile p {
+    font-size: 30px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin-top: 10px;
+    font-weight: bold;
+    color: white;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.menu li {
+    display: flex;
+    align-items: center;
+    padding: 15px 10px; /* Aumentar el padding */
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    color: rgb(0, 0, 0);
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    border-radius: 5px;
+    font-size: 29px; /* Aumentar el tamaño del texto del menú */
+}
+
+.menu li:hover {
+    background-color: #ffcc80;
+}
+
+.menu li img.icon {
+    width: 36px; /* Aumentar el tamaño de los iconos */
+    height: 36px;
+    margin-right: 20px; /* Aumentar el margen derecho */
+}
+
+.menu li span {
+    flex: 1;
+    text-align: left;
+    font-size: 26px; /* Aumentar aún más el tamaño de las palabras */
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
