@@ -2,6 +2,7 @@ from app import db
 from app.compartido.modelos.modelo_libro import Libro
 from app.compartido.modelos.modelo_movimiento import Movimiento, TipoMovimiento, DetallesMovimiento
 from .config import Config
+from app.compartido.modelos.modelo_metodo_pago import MetodoPago
 
 config = Config()
 
@@ -37,4 +38,20 @@ def init_tipos_movimiento():
         if not tipo_existente:
             nuevo_tipo = TipoMovimiento(nombre=tipo_data['nombre'], descripcion=tipo_data['descripcion'])
             db.session.add(nuevo_tipo)
+    db.session.commit()
+
+
+def init_metodos_pago():
+    """Inicializa los métodos de pago en la base de datos a partir de la configuración."""
+
+    for metodo_data in config.METODOS_PAGO:
+        metodo_existente = MetodoPago.query.filter_by(nombre=metodo_data['nombre']).first()
+
+        if not metodo_existente:
+            nuevo_metodo = MetodoPago(
+                nombre=metodo_data['nombre'], 
+                descripcion=metodo_data['descripcion']
+            )
+            db.session.add(nuevo_metodo)
+
     db.session.commit()
