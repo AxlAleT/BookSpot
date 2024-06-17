@@ -5,7 +5,8 @@ from app import db
 import datetime
 from app.compartido.modelos.modelo_movimiento import Movimiento, DetallesMovimiento, TipoMovimiento
 from app.compartido.excepciones.excepciones_libro import InvalidRequestException, BookNotFoundException, NotEnoughStockException
-
+from app.compartido.modelos.modelo_venta import Venta, DetallesVenta
+from app.compartido.modelos.modelo_metodo_pago import MetodoPago
 
 ventas_bp = Blueprint('ventas', __name__)
 
@@ -57,21 +58,30 @@ def completar():
         
         # Obtener los elementos del pedido
         items = request_data.get('items')
+        metodo_pago = request_data.get('metodo_pago')
+
+        # Validar el método de pago
+        metodo_pago_obj = MetodoPago.query.filter_by(nombre=metodo_pago).first()
+        if not metodo_pago_obj:
+            raise InvalidRequestException(f"Método de pago {metodo_pago} no es válido")
 
         # Crear una nueva entrada en la tabla Movimiento
         tipo_movimiento_vpv = TipoMovimiento.query.filter_by(nombre='VPV').first()
         if not tipo_movimiento_vpv:
             raise InvalidRequestException()
-        
+
         nuevo_movimiento = Movimiento(
             id_tipo_movimiento=tipo_movimiento_vpv.id_tipo_movimiento,
-            fecha_hora=datetime.datetime.now(datetime.UTC)
+            fecha_hora=datetime.datetime.now(datetime.timezone.utc)
         )
         db.session.add(nuevo_movimiento)
         db.session.commit()  # Commit para obtener el ID del movimiento
-        
+
         # Obtener el ID del movimiento recién creado
         id_movimiento = nuevo_movimiento.id_movimiento
+
+        # Calcular el monto total de la venta
+        monto_total = 0
 
         for item in items:
             libro_id = item.get('id_libro')
@@ -94,7 +104,36 @@ def completar():
                 cantidad=cantidad
             )
             db.session.add(nuevo_detalle)
-        
+
+            # Actualizar el monto total
+            monto_total += libro.precio * cantidad
+
+        # Crear una nueva entrada en la tabla Venta
+        nueva_venta = Venta(
+            fecha_venta=datetime.datetime.now(datetime.timezone.utc),
+            id_usuario=1,  # ID de usuario placeholder, actualizar según tu lógica de negocio
+            monto=monto_total
+        )
+        db.session.add(nueva_venta)
+        db.session.commit()  # Commit para obtener el ID de la venta
+
+        # Obtener el ID de la venta recién creada
+        id_venta = nueva_venta.id_venta
+
+        # Crear entradas en la tabla DetallesVenta
+        for item in items:
+            libro_id = item.get('id_libro')
+            cantidad = item.get('cantidad')
+            precio_venta = Libro.query.get(libro_id).precio
+
+            nuevo_detalle_venta = DetallesVenta(
+                id_venta=id_venta,
+                id_libro=libro_id,
+                cantidad=cantidad,
+                precio_venta=precio_venta
+            )
+            db.session.add(nuevo_detalle_venta)
+
         # Confirmar los cambios en la base de datos
         db.session.commit()
         
@@ -106,6 +145,14 @@ def completar():
     except Exception as e:
         db.session.rollback()  # Deshacer cualquier cambio en caso de error general
         return jsonify({"error": str(e)}), 500
+
+
+def validate_request(request_data):
+    try:
+        VentaRequestSchema().load(request_data)
+    except:
+        raise InvalidRequestException()
+
 
 
 def validate_request(request_data):

@@ -12,6 +12,7 @@ class LibroResponseSchema(Schema):
 
 class VentaRequestSchema(Schema):
     items = fields.List(fields.Nested(LibroItemSchema), required=True)
+    metodo_pago = fields.Str(required=True)
 
 class VentaResponseSchema(Schema):
     books = fields.List(fields.Nested(LibroResponseSchema), required=True)
