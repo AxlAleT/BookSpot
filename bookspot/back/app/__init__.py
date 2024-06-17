@@ -6,7 +6,7 @@ from flask_migrate import Migrate
 
 db = SQLAlchemy()
 ma = Marshmallow()
-migrate = Migrate()  # Inicializar Flask-Migrate
+migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
@@ -15,15 +15,11 @@ def create_app():
 
     db.init_app(app)
     ma.init_app(app)
-    migrate.init_app(app, db)  # Inicializar Flask-Migrate con la app y db
-
+    migrate.init_app(app, db)  
     from app.api.ventas.router import ventas_bp
     app.register_blueprint(ventas_bp, url_prefix='/ventas')
-    from app.api.inventario.router import libros_bp
-    app.register_blueprint(libros_bp, url_prefix='/inventario')
+    from app.api.inventario.router import inventario_bp
+    app.register_blueprint(inventario_bp, url_prefix='/inventario')
 
-    # Registrar otros blueprints de la misma manera
-    # from app.api.inventario.router import inventario_bp
-    # app.register_blueprint(inventario_bp, url_prefix='/inventario')
 
     return app
