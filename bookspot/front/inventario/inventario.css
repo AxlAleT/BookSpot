@@ -1,0 +1,117 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: url('background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    color: #000000;
+}
+
+.sidebar {
+    width: 80px; /* Ancho del sidebar */
+    height: 100vh; /* Altura completa de la ventana */
+    background-color: rgba(255, 165, 0, 0.9); /* Naranja transparente */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Alinear desde arriba */
+    position: fixed; /* Fijar el sidebar */
+    left: 0; /* Alinear a la izquierda */
+    top: 0; /* Alinear arriba */
+    padding-top: 20px; /* Espacio superior dentro del sidebar */
+    padding-bottom: 20px; /* Espacio inferior dentro del sidebar */
+}
+
+.icon-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column; /* Mostrar los íconos de arriba a abajo */
+    align-items: center;
+    justify-content: flex-start; /* Alinear desde arriba */
+    height: 100%; /* Ocupar toda la altura del sidebar */
+}
+
+.icon-list li {
+    width: 40px; /* Tamaño de los iconos */
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%; /* Forma circular */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px; /* Espacio menos expansivo entre los íconos */
+}
+
+.icon-list img {
+    width: 100%; /* Ajustar tamaño de la imagen al contenedor */
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%; /* Forma circular */
+}
+
+
+
+.content {
+    margin-left: 80px; /* Dejar espacio para el sidebar */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+h1 {
+    background-color: rgba(255, 165, 0, 0.9); /* Naranja transparente */
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 800px;
+}
+
+table {
+    width: 90%;
+    max-width: 800px;
+    margin-top: 20px;
+    border-collapse: collapse;
+    background-color: rgba(255, 165, 0, 0.9); /* Naranja transparente */
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+    background-color: #979795; /* Amarillo dorado */
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #fffefe;
+    text-align: center;
+}
+
+th {
+    color: #000000;
+}
+
+td {
+    background-color: #d4d4d4; /* Fondo claro para filas */
+}
+
+button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #FFD700; /* Amarillo dorado */
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #FFA500; /* Naranja */
+}
