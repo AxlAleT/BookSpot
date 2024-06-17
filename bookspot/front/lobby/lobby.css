@@ -24,7 +24,7 @@ body {
 }
 
 .profile-picture {
-    width: 170px; /* Tamaño del contenedor de la imagen */
+    width: 170px;
     height: 170px;
     border-radius: 50%;
     overflow: hidden;
@@ -32,7 +32,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px solid orange; /* Borde del contenedor */
+    border: 2px solid orange;
 }
 
 .profile-picture img {
@@ -58,14 +58,14 @@ body {
 .menu li {
     display: flex;
     align-items: center;
-    padding: 15px 10px; /* Aumentar el padding */
+    padding: 15px 10px;
     width: 100%;
     cursor: pointer;
     transition: background-color 0.3s;
     color: rgb(0, 0, 0);
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     border-radius: 5px;
-    font-size: 29px; /* Aumentar el tamaño del texto del menú */
+    font-size: 29px;
 }
 
 .menu li:hover {
@@ -73,19 +73,86 @@ body {
 }
 
 .menu li img.icon {
-    width: 36px; /* Aumentar el tamaño de los iconos */
+    width: 36px;
     height: 36px;
-    margin-right: 20px; /* Aumentar el margen derecho */
+    margin-right: 20px;
 }
 
 .menu li span {
     flex: 1;
     text-align: left;
-    font-size: 26px; /* Aumentar aún más el tamaño de las palabras */
+    font-size: 26px;
 }
 
 .main-content {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
+}
+
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+#inventory {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#inventory h1 {
+    color: orange;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.inventory-table th,
+.inventory-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+}
+
+.inventory-table th {
+    background-color: orange;
+    color: white;
+}
+
+.inventory-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.btn {
+    background-color: orange;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #ffcc80;
+}
+
+.btn.add {
+    display: block;
+    margin: 0 auto;
 }
