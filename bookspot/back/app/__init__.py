@@ -20,6 +20,6 @@ def create_app():
     app.register_blueprint(ventas_bp, url_prefix='/ventas')
     from app.api.inventario.router import inventario_bp
     app.register_blueprint(inventario_bp, url_prefix='/inventario')
-
-
+    from app.api.apartados.router import apartados_bp
+    app.register_blueprint(apartados_bp, url_prefix='/apartado')
     return app

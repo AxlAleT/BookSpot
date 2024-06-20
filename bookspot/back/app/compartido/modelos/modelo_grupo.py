@@ -22,5 +22,3 @@ class Grupo(db.Model):
             'descripcion': self.descripcion,
             'permisos': self.permisos
         }
-}
-
