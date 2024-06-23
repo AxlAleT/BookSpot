@@ -1,16 +1,16 @@
 from app import db
 from .modelo_libro import Libro
-#from .modelo_usuario import Usuario
+from .modelo_usuario import Usuario
 
 class Venta(db.Model):
     __tablename__ = 'venta'
 
     id_venta = db.Column(db.Integer, primary_key=True)
     fecha_venta = db.Column(db.DateTime, nullable=False)
-    #id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+    id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
     monto = db.Column(db.Float, nullable=False)
 
-    #usuario = db.relationship("Usuario", back_populates="ventas")
+    usuario = db.relationship("Usuario", back_populates="ventas")
     detalles = db.relationship("DetallesVenta", back_populates="venta")
 
     def __init__(self, fecha_venta, id_usuario, monto):
