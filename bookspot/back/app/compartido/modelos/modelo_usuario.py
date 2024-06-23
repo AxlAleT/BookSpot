@@ -14,7 +14,6 @@ class Usuario(db.Model):
     grupo = db.relationship("Grupo", back_populates="usuarios")
     ventas = db.relationship("Venta", back_populates="usuario")
     apartados = db.relationship("Apartado", back_populates="usuario")
-    movimientos = db.relationship("Movimiento", back_populates="usuario")
 
     def __init__(self, nombre, telefono, direccion, correo_electronico, id_grupo):
         self.nombre = nombre
