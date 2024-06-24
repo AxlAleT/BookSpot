@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     const menuItems = document.querySelectorAll(".menu li");
     const sections = document.querySelectorAll(".section");
+    const searchInput = document.getElementById("search-input");
 
     menuItems.forEach(item => {
         item.addEventListener("click", function() {
@@ -75,8 +76,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     <td>${libro.precio}</td>
                     <td>${libro.available_quantity}</td>
                     <td>
-                        <button class="btn edit">Editar</button>
-                        <button class="btn delete">Eliminar</button>
+                        <button class="btn edit" data-id="${libro.id}">Editar</button>
+                        <button class="btn delete" data-id="${libro.id}">Eliminar</button>
                     </td>
                 `;
                 tableBody.appendChild(row);
@@ -86,15 +87,20 @@ document.addEventListener("DOMContentLoaded", function() {
             const editButtons = document.querySelectorAll(".btn.edit");
             const deleteButtons = document.querySelectorAll(".btn.delete");
 
-            editButtons.forEach((button, index) => {
+            editButtons.forEach(button => {
                 button.addEventListener("click", function() {
-                    editarLibro(data[index]);
+                    const libroId = this.getAttribute("data-id");
+                    const libro = data.find(libro => libro.id === parseInt(libroId));
+                    if (libro) {
+                        abrirFormularioEditar(libro);
+                    }
                 });
             });
 
-            deleteButtons.forEach((button, index) => {
+            deleteButtons.forEach(button => {
                 button.addEventListener("click", function() {
-                    eliminarLibro(data[index].id);
+                    const libroId = this.getAttribute("data-id");
+                    eliminarLibro(libroId);
                 });
             });
         })
@@ -103,19 +109,32 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // Función para editar un libro
-    function editarLibro(libro) {
-        const titulo = prompt("Nuevo título:", libro.titulo);
-        const precio = prompt("Nuevo precio:", libro.precio);
-        const cantidad = prompt("Nueva cantidad:", libro.available_quantity);
+    // Función para abrir el formulario modal de edición de libro
+    function abrirFormularioEditar(libro) {
+        const modal = document.getElementById("edit-book-modal");
+        modal.style.display = "block";
 
-        if (titulo && precio && cantidad) {
-            fetch("/api/inventario/editar_libro/", {
+        // Llenar el formulario con los datos actuales del libro
+        document.getElementById("edit-id").value = libro.id;
+        document.getElementById("edit-titulo").value = libro.titulo;
+        document.getElementById("edit-precio").value = libro.precio;
+        document.getElementById("edit-cantidad").value = libro.available_quantity;
+
+        // Manejar el envío del formulario de edición
+        document.getElementById("form-editar-libro").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const id = document.getElementById("edit-id").value;
+            const titulo = document.getElementById("edit-titulo").value;
+            const precio = document.getElementById("edit-precio").value;
+            const cantidad = document.getElementById("edit-cantidad").value;
+
+            fetch(`/api/inventario/editar_libro/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ id: libro.id, titulo, precio, available_quantity: cantidad })
+                body: JSON.stringify({ titulo, precio, available_quantity: cantidad })
             })
             .then(response => response.json())
             .then(data => {
@@ -125,12 +144,22 @@ document.addEventListener("DOMContentLoaded", function() {
                     alert("Libro editado exitosamente.");
                     // Actualiza la tabla de inventario
                     actualizarInventario();
+                    // Cierra el modal de edición
+                    modal.style.display = "none";
+                    // Limpiar el formulario
+                    document.getElementById("form-editar-libro").reset();
                 }
             })
             .catch(error => {
                 alert("Error: " + error);
             });
-        }
+        });
+
+        // Manejar el cierre del modal de edición
+        const closeButton = document.getElementById("close-edit-modal");
+        closeButton.addEventListener("click", function() {
+            modal.style.display = "none";
+        });
     }
 
     // Función para eliminar un libro
@@ -160,4 +189,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Inicializa la tabla de inventario
     actualizarInventario();
+
+    // Función para filtrar libros por título
+    searchInput.addEventListener("input", function() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const rows = document.querySelectorAll("#inventory-table-body tr");
+
+        rows.forEach(row => {
+            const title = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
+            if (title.includes(searchTerm)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
 });
