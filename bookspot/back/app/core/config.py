@@ -28,3 +28,5 @@ class Config:
             ]
             self.APARTADO_PORCENTAJE = 0.3
             Config._instance = self
+
+config = Config.get_instance()
