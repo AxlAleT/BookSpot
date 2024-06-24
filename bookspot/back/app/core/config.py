@@ -1,4 +1,4 @@
-class SingletonConfig:
+class Config:
     _instance = None
 
     @classmethod
@@ -8,7 +8,7 @@ class SingletonConfig:
         return cls._instance
 
     def __init__(self):
-        if SingletonConfig._instance is not None:
+        if Config._instance is not None:
             raise Exception("This class is a singleton!")
         else:
             self.SQLALCHEMY_DATABASE_URI = 'sqlite:///test.db'
@@ -27,8 +27,4 @@ class SingletonConfig:
                 {'nombre': 'EFE', 'descripcion': 'Pago con efectivo'},
             ]
             self.APARTADO_PORCENTAJE = 0.3
-            SingletonConfig._instance = self
-
-    # Métodos para actualizar configuraciones aquí...
-
-Config = SingletonConfig.get_instance()
+            Config._instance = self
