@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS
 from flask_migrate import Migrate
+from app.core.config import Config  # Asegúrate de tener la ruta correcta
+
 
 db = SQLAlchemy()
 ma = Marshmallow()
@@ -11,7 +13,7 @@ migrate = Migrate()
 def create_app():
     app = Flask(__name__)
     CORS(app)
-    app.config.from_object('app.core.config.Config')
+    app.config.from_object(Config.get_instance())
 
     db.init_app(app)
     ma.init_app(app)
