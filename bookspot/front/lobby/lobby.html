@@ -12,13 +12,13 @@
     <div class="sidebar">
         <div class="profile">
             <div class="profile-picture">
-                <img src="ruta/a/tu/imagen.jpg" alt="Administrador">
+                <img src="man.png" alt="Administrador">
             </div>
             <p>Administrador</p>
         </div>
         <ul class="menu">
             <li data-section="ventas">
-                <i class="fa-solid fa-money-bill"></i>                
+                <i class="fa-solid fa-money-bill"></i>
                 <span>Ventas</span>
             </li>
             <li data-section="roles">
@@ -26,58 +26,71 @@
                 <span>Roles y Permisos</span>
             </li>
             <li data-section="informes">
-                <i class="fa-regular fa-rectangle-list"></i>                
+                <i class="fa-regular fa-rectangle-list"></i>
                 <span>Informes</span>
             </li>
             <li data-section="inventario">
                 <i class="fa-solid fa-book"></i>
-                <span> Inventario</span>
+                <span>Inventario</span>
             </li>
         </ul>
     </div>
     <div class="main-content">
+        <div id="inventario" class="section active">
+            <div class="selection-bar">
+                <button data-view="inventory-table" class="selection-button active">Tabla de Inventario</button>
+                <button data-view="reportes" class="selection-button">Reportes</button>
+            </div>
+            <div id="inventory-table" class="view active">
+                <h1>Inventario</h1>
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Buscar libros...">
+                    <button class="search-button"><i class="fa fa-search"></i></button>
+                </div>
+                <table class="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>Id Producto</th>
+                            <th>Titulo</th>
+                            <th>Precio</th>
+                            <th>Disponibilidad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-table-body">
+                        <!-- Filas de inventario aquí -->
+                    </tbody>
+                </table>
+                <button class="btn add" onclick="mostrarFormularioAgregar()">Añadir Producto</button>
+                <div id="add-book-form" style="display: none;">
+                    <h2>Añadir Nuevo Libro</h2>
+                    <form id="form-agregar-libro">
+                        <label for="titulo">Título:</label>
+                        <input type="text" id="titulo" name="titulo" required>
+                        <label for="precio">Precio:</label>
+                        <input type="number" id="precio" name="precio" step="0.01" required>
+                        <label for="cantidad">Cantidad:</label>
+                        <input type="number" id="cantidad" name="cantidad" required>
+                        <button type="submit" class="btn">Agregar Libro</button>
+                    </form>
+                </div>
+            </div>
+            <div id="reportes" class="view">
+                <h1>Reportes</h1>
+                <!-- Contenido de la sección de reportes -->
+            </div>
+        </div>
         <div id="ventas" class="section">
-            <!-- Contenido de la sección Ventas aquí -->
+            <h1>Ventas</h1>
+            <!-- Contenido de la sección de ventas -->
         </div>
         <div id="roles" class="section">
-            <!-- Contenido de la sección Roles y Permisos aquí -->
+            <h1>Roles y Permisos</h1>
+            <!-- Contenido de la sección de roles y permisos -->
         </div>
         <div id="informes" class="section">
-            <!-- Contenido de la sección Informes aquí -->
-        </div>
-        <div id="inventario" class="section">
-            <h1>Inventario</h1>
-            <div class="search-bar">
-                <input type="text" id="search-input" placeholder="Buscar libros...">
-                <button class="search-button"><i class="fa fa-search"></i></button>
-            </div>
-            <table class="inventory-table">
-                <thead>
-                    <tr>
-                        <th>Id Producto</th>
-                        <th>Titulo</th>
-                        <th>Precio</th>
-                        <th>Disponibilidad</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="inventory-table-body">
-                    <!-- Filas de inventario aquí -->
-                </tbody>
-            </table>
-            <button class="btn add" onclick="mostrarFormularioAgregar()">Añadir Producto</button>
-            <div id="add-book-form" style="display: none;">
-                <h2>Añadir Nuevo Libro</h2>
-                <form id="form-agregar-libro">
-                    <label for="titulo">Título:</label>
-                    <input type="text" id="titulo" name="titulo" required>
-                    <label for="precio">Precio:</label>
-                    <input type="number" id="precio" name="precio" step="0.01" required>
-                    <label for="cantidad">Cantidad:</label>
-                    <input type="number" id="cantidad" name="cantidad" required>
-                    <button type="submit" class="btn">Agregar Libro</button>
-                </form>
-            </div>
+            <h1>Informes</h1>
+            <!-- Contenido de la sección de informes -->
         </div>
     </div>
     <script src="script.js"></script>
