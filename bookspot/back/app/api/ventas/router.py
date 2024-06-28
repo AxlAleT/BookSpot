@@ -152,11 +152,3 @@ def validate_request(request_data):
         VentaRequestSchema().load(request_data)
     except:
         raise InvalidRequestException()
-
-
-
-def validate_request(request_data):
-    try:
-        VentaRequestSchema().load(request_data)
-    except:
-        raise InvalidRequestException()
