@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ items: [{ id_libro, cantidad }] })
+                body: JSON.stringify({ items: [{ id_libro, cantidad }], metodo_pago: paymentMethodSelect.value})
             });
             if (!response.ok) {
                 const errorText = await response.text();
