@@ -111,7 +111,7 @@ def completar():
         # Crear una nueva entrada en la tabla Venta
         nueva_venta = Venta(
             fecha_venta=datetime.datetime.now(datetime.timezone.utc),
-            id_usuario=1,  # ID de usuario placeholder, actualizar según tu lógica de negocio
+            #id_usuario=1,  # ID de usuario placeholder, actualizar según tu lógica de negocio
             monto=monto_total
         )
         db.session.add(nueva_venta)
