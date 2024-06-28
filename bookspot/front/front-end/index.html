@@ -9,18 +9,7 @@
 </head>
 <body>
     <div class="container-fluid">
-        <!-- Menú de hamburguesa -->
-        <nav class="navbar navbar-light bg-light">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <span class="navbar-brand mb-0 h1">BookSpoot</span>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <!-- Aquí se pueden agregar elementos del menú en el futuro -->
-                </ul>
-            </div>
-        </nav>
+        
         <br><br>
 
         <!-- Contenedor principal -->
@@ -53,7 +42,9 @@
             <div class="form-group">
                 <label for="payment-method">Método de Pago:</label>
                 <select id="payment-method" class="form-control">
-                    <!-- Opciones de método de pago cargadas dinámicamente -->
+                    <option value="EFE">Efectivo</option>
+                    <option value="TDB">Tarjeta De Debito</option>
+                    <option value="TDC">Tarjeta De Credito</option>
                 </select>
             </div>
 
