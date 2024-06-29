@@ -3,9 +3,9 @@ from werkzeug.security import check_password_hash
 from app import db
 from app.compartido.modelos.modelo_usuario import Usuario
 
-auth_bp = Blueprint('auth', __name__)
+login_bp = Blueprint('login', __name__)
 
-@auth_bp.route('/login/', methods=['POST'])
+@login_bp.route('/login/', methods=['POST'])
 def login():
     request_data = request.json
     correo_electronico = request_data.get('correo_electronico')

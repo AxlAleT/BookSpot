@@ -24,7 +24,7 @@ def create_app():
     app.register_blueprint(inventario_bp, url_prefix='/inventario')
     from app.api.apartados.router import apartados_bp
     app.register_blueprint(apartados_bp, url_prefix='/apartado')
-    from app.api.auth.router import auth_bp
-    app.register_blueprint(auth_bp, url_prefix='/auth')
+    from app.api.login.router import login_bp
+    app.register_blueprint(login_bp, url_prefix='/auth')
 
     return app

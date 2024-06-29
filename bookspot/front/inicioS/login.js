@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Enviar los datos al servidor
-            const response = await fetch('/auth/login', {
+            const response = await fetch('/login/login/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
