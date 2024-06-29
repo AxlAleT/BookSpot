@@ -12,7 +12,7 @@ class Usuario(db.Model):
     id_grupo = db.Column(db.Integer, db.ForeignKey('grupo.id'), nullable=False)
 
     grupo = db.relationship("Grupo", back_populates="usuarios")
-    #ventas = db.relationship("Venta", back_populates="usuario")
+    ventas = db.relationship("Venta", back_populates="usuario")
     apartados = db.relationship("Apartado", back_populates="usuario")
 
     def __init__(self, nombre, telefono, direccion, correo_electronico, id_grupo):

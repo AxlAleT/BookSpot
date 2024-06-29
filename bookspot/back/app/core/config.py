@@ -1,3 +1,4 @@
+
 class Config:
     _instance = None
 
@@ -14,6 +15,7 @@ class Config:
             self.SQLALCHEMY_DATABASE_URI = 'sqlite:///test.db'
             self.SQLALCHEMY_TRACK_MODIFICATIONS = False
             self.SECRET_KEY = 'your_secret_key'
+
             self.TIPOS_MOVIMIENTO = [
                 {'nombre': 'VPV', 'descripcion': 'Venta en Punto de Venta, relacionado a la venta de un producto en la tienda fisica'},
                 {'nombre': 'APV', 'descripcion': 'Apartado en Punto de Venta, relacionado a un apartado de productos en el punto de venta'},
@@ -26,7 +28,48 @@ class Config:
                 {'nombre': 'TDB', 'descripcion': 'Pago con tarjeta de debito'},
                 {'nombre': 'EFE', 'descripcion': 'Pago con efectivo'},
             ]
+
             self.APARTADO_PORCENTAJE = 0.3
+
+            self.GRUPOS = [
+                {'nombre': 'admin', 'descripcion': 'Grupo de administradores, con todos los permisos'},
+                {'nombre': 'vendedor', 'descripcion': 'Grupo de vendedores, con permisos limitados'},
+                {'nombre': 'almacenista', 'descripcion': 'Grupo de almacenistas, tienen permisos para hacer operaciones en el inventario'},
+            ]
+
+            self.USUARIOS_POR_DEFECTO = [
+                {
+                    'nombre': 'Usuario Admin',
+                    'telefono': '555-0100',
+                    'direccion': 'Calle Admin, 123',
+                    'correo_electronico': 'admin@ejemplo.com',
+                    'grupo': 'admin',
+                    'password': 'password_seguro_admin'
+                },
+                {
+                    'nombre': 'Usuario Vendedor',
+                    'telefono': '555-0200',
+                    'direccion': 'Calle Vendedor, 456',
+                    'correo_electronico': 'vendedor@ejemplo.com',
+                    'grupo': 'vendedor',
+                    'password': 'password_seguro_vendedor'
+                },
+                {
+                    'nombre': 'Usuario Almacenista',
+                    'telefono': '555-0300',
+                    'direccion': 'Calle Almacenista, 789',
+                    'correo_electronico': 'almacenista@ejemplo.com',
+                    'grupo': 'almacenista',
+                    'password': 'password_seguro_almacenista'
+                }
+            ]
+
+            self.SESSION_TYPE = 'sqlalchemy'
+            from app import db
+            self.SESSION_SQLALCHEMY = db
+            self.SESSION_SQLALCHEMY_TABLE = 'sesion'
+            self.SESSION_PERMANENT = False
+
             Config._instance = self
 
 config = Config

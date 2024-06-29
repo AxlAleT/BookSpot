@@ -7,22 +7,22 @@ class Venta(db.Model):
 
     id_venta = db.Column(db.Integer, primary_key=True)
     fecha_venta = db.Column(db.DateTime, nullable=False)
-    #id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+    id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
     monto = db.Column(db.Float, nullable=False)
 
-    #usuario = db.relationship("Usuario", back_populates="ventas")
+    usuario = db.relationship("Usuario", back_populates="ventas")
     detalles = db.relationship("DetallesVenta", back_populates="venta")
 
-    def __init__(self, fecha_venta, monto):
+    def __init__(self, fecha_venta, monto, id_usuario):
         self.fecha_venta = fecha_venta
-        #self.id_usuario = id_usuario
+        self.id_usuario = id_usuario
         self.monto = monto
 
     def to_dict(self):
         return {
             'id_venta': self.id_venta,
             'fecha_venta': self.fecha_venta.isoformat() if self.fecha_venta else None,
-            #'id_usuario': self.id_usuario,
+            'id_usuario': self.id_usuario,
             'monto': self.monto,
             'detalles': [detalle.to_dict() for detalle in self.detalles]
         }
