@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, session  
+from flask import Blueprint, request, jsonify, session
 from app import db
 from app.compartido.modelos.modelo_usuario import Usuario
 from .schemas import InicioSesionSchema
@@ -8,7 +8,7 @@ auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/login/', methods=['POST'])
 def iniciar_sesion():
-    print("Iniciar sesion")
+    print("Iniciar sesión")
     request_data = request.json
     schema = InicioSesionSchema()
     errors = schema.validate(request_data)
@@ -28,6 +28,7 @@ def iniciar_sesion():
         return jsonify({"mensaje": "Inicio de sesión exitoso", "usuario": usuario.to_dict()}), 200
     else:
         return jsonify({"error": "Correo electrónico o contraseña incorrectos"}), 401
+
     
 
 def requiere_grupo(grupo_requerido):

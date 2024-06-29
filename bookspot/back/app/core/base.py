@@ -17,6 +17,7 @@ def init_db():
     init_metodos_pago()
     init_grupos()
     init_usuarios()
+    print("La base de datos fue inicializada con valores por defecto.")
 
 def populate_books():
 
@@ -38,8 +39,6 @@ def populate_books():
         db.session.add(book)
     
     db.session.commit()
-    print("Books have been added to the database.")
-
 
 def init_tipos_movimiento():
     """Inserta tipos de movimiento en la base de datos sin verificar si ya existen."""

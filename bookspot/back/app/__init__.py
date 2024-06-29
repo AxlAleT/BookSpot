@@ -13,8 +13,9 @@ migrate = Migrate()
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config.get_instance())
+    app.config['DEBUG'] = True  # Habilitar modo debug
 
-    CORS(app)
+    CORS(app, supports_credentials=True)
 
     db.init_app(app)
     ma.init_app(app)
