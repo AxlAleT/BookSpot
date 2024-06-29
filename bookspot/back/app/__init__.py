@@ -5,7 +5,6 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from app.core.config import Config  # Asegúrate de tener la ruta correcta
 
-
 db = SQLAlchemy()
 ma = Marshmallow()
 migrate = Migrate()
@@ -14,6 +13,7 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
     app.config.from_object(Config.get_instance())
+    app.debug = True
 
     db.init_app(app)
     ma.init_app(app)
@@ -24,4 +24,7 @@ def create_app():
     app.register_blueprint(inventario_bp, url_prefix='/inventario')
     from app.api.apartados.router import apartados_bp
     app.register_blueprint(apartados_bp, url_prefix='/apartado')
+    from app.api.auth.router import auth_bp
+    app.register_blueprint(auth_bp, url_prefix='/auth')
+
     return app
