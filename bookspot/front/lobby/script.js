@@ -180,7 +180,131 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    actualizarInventario();
+    // Función para crear un gráfico de ventas
+    function crearGraficoVentas() {
+        const ctx = document.getElementById('ventas-chart').getContext('2d');
+        fetch("/api/ventas/obtener_datos/")
+            .then(response => response.json())
+            .then(data => {
+                const labels = data.map(item => item.fecha);
+                const ventas = data.map(item => item.total);
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Ventas',
+                            data: ventas,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("Error al obtener datos de ventas:", error);
+            });
+    }
+
+    // Función para crear un gráfico de movimientos
+    function crearGraficoMovimientos() {
+        const ctx = document.getElementById('movimientos-chart').getContext('2d');
+        fetch("/api/movimientos/obtener_datos/")
+            .then(response => response.json())
+            .then(data => {
+                const labels = data.map(item => item.fecha);
+                const movimientos = data.map(item => item.total);
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Movimientos',
+                            data: movimientos,
+                            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                            borderColor: 'rgba(153, 102, 255, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("Error al obtener datos de movimientos:", error);
+            });
+    }
+
+    // Función para agregar un nuevo rol
+    document.getElementById("form-agregar-rol").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const nombreRol = document.getElementById("nombre-rol").value;
+        const permisosSeleccionados = Array.from(document.querySelectorAll('input[name="permisos[]"]:checked')).map(el => el.value);
+
+        fetch("/api/roles/agregar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ nombre: nombreRol, permisos: permisosSeleccionados })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert("Error: " + data.error);
+            } else {
+                alert("Rol agregado exitosamente.");
+                // Limpiar el formulario
+                document.getElementById("form-agregar-rol").reset();
+                // Actualizar la lista de roles
+                actualizarRoles();
+            }
+        })
+        .catch(error => {
+            alert("Error: " + error);
+        });
+    });
+
+    // Función para obtener y mostrar la lista de roles
+    function actualizarRoles() {
+        fetch("/api/roles")
+        .then(response => response.json())
+        .then(data => {
+            const rolesList = document.getElementById("roles-list");
+            rolesList.innerHTML = ""; // Limpiar la lista actual
+
+            data.forEach(rol => {
+                const rolElement = document.createElement("li");
+                rolElement.textContent = rol.nombre;
+                rolesList.appendChild(rolElement);
+            });
+        })
+        .catch(error => {
+            console.error("Error al obtener la lista de roles:", error);
+        });
+    }
+
+    // Inicializar la lista de roles al cargar la página
+    actualizarRoles();
+
+    crearGraficoVentas();
+    crearGraficoMovimientos();
 
     searchInput.addEventListener("input", function() {
         const searchTerm = searchInput.value.toLowerCase();
@@ -195,4 +319,5 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+
 });

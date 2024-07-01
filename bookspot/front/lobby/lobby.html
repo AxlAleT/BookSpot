@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="sidebar">
@@ -78,7 +79,13 @@
             </div>
             <div id="reportes" class="view">
                 <h1>Reportes</h1>
-                <!-- Contenido de la sección de reportes -->
+                <button id="generate-file" class="btn">Generar Archivo</button>
+                <div class="chart-container">
+                    <canvas id="ventas-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="movimientos-chart"></canvas>
+                </div>
             </div>
         </div>
         <div id="ventas" class="section active">
@@ -138,17 +145,42 @@
         </div>
         <div id="roles" class="section">
             <h1>Roles y Permisos</h1>
-            <!-- Contenido de la sección de roles y permisos -->
+            <div class="container">
+                <h2>Agregar Nuevo Rol</h2>
+                <form id="form-agregar-rol">
+                    <label for="nombre-rol">Nombre del Rol:</label>
+                    <input type="text" id="nombre-rol" name="nombre-rol" required>
+                    <h3>Asignar Permisos</h3>
+                    <div class="permisos">
+                        <label>
+                            <input type="checkbox" name="permisos[]" value="ventas">
+                            Ventas
+                        </label>
+                        <label>
+                            <input type="checkbox" name="permisos[]" value="inventario">
+                            Inventario
+                        </label>
+                        <label>
+                            <input type="checkbox" name="permisos[]" value="reportes">
+                            Reportes
+                        </label>
+                        <!-- Agregar más permisos según sea necesario -->
+                    </div>
+                    <button type="submit" class="btn">Agregar Rol</button>
+                </form>
+            </div>
         </div>
         <div id="informes" class="section">
             <h1>Informes</h1>
             <!-- Contenido de la sección de informes -->
         </div>
+      
+
+
     </div>
     <script src="script.js"></script>
     <script src="ventas-script.js"></script>
     <script src="inventario-script.js"></script>
     <script src="apartados-script.js"></script>
-
 </body>
 </html>
