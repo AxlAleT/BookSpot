@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS
@@ -31,5 +31,9 @@ def create_app():
     app.register_blueprint(ventas_bp, url_prefix='/ventas')
     from app.blueprints.inventario.bp_inventario import inventario_bp
     app.register_blueprint(inventario_bp, url_prefix='/inventario')
+
+    @app.route('/')
+    def index():
+        return render_template('login.html')
 
     return app

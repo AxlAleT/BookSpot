@@ -7,6 +7,8 @@ class Grupo(db.Model):
     nombre = db.Column(db.String(50), nullable=False)
     descripcion = db.Column(db.String(255), nullable=True)
 
+    usuarios = db.relationship("Usuario", back_populates="grupo")
+
     def __init__(self, nombre, descripcion):
         self.nombre = nombre
         self.descripcion = descripcion

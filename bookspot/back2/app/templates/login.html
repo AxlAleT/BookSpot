@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio de Sesión</title>
-    <link rel="stylesheet" href="inicio.css">
-    <script src="login_script.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <script src="{{ url_for('static', filename='js/login_script.js') }}"></script>
 </head>
 <body>
     <div class="login-container">
         <div class="profile-image">
-            <img src="perfil.png" alt="Perfil">
+            <img src="{{ url_for('static', filename='img/icono_perfil.png') }}" alt="Perfil">
         </div>
         <form class="login-form">
             <input type="email" placeholder="Usuario" required id="email">

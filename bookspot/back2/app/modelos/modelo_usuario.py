@@ -1,7 +1,5 @@
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from .modelo_grupo import Grupo
-
 class Usuario(db.Model):
     __tablename__ = 'usuario'
 
@@ -13,6 +11,10 @@ class Usuario(db.Model):
     password_hash = db.Column(db.String(128))
     id_grupo = db.Column(db.Integer, db.ForeignKey('grupo.id'), nullable=False)
     ventas = db.relationship("Venta", back_populates="usuario")
+
+    grupo = db.relationship("Grupo", back_populates="usuarios")
+    ventas = db.relationship("Venta", back_populates="usuario")
+    apartados = db.relationship("Apartado", back_populates="usuario")
 
     def __init__(self, nombre, telefono, direccion, correo_electronico, id_grupo, password):
         self.nombre = nombre
