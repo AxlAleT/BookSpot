@@ -86,28 +86,32 @@ document.addEventListener("DOMContentLoaded", function() {
                 tableBody.appendChild(row);
             });
 
-            const editButtons = document.querySelectorAll(".btn.edit");
-            const deleteButtons = document.querySelectorAll(".btn.delete");
-
-            editButtons.forEach(button => {
-                button.addEventListener("click", function() {
-                    const libroId = this.getAttribute("data-id");
-                    const libro = data.find(libro => libro.id === parseInt(libroId));
-                    if (libro) {
-                        abrirFormularioEditar(libro);
-                    }
-                });
-            });
-
-            deleteButtons.forEach(button => {
-                button.addEventListener("click", function() {
-                    const libroId = this.getAttribute("data-id");
-                    eliminarLibro(libroId);
-                });
-            });
+            agregarEventosBotones();
         })
         .catch(error => {
             console.error("Error al obtener el inventario:", error);
+        });
+    }
+
+    function agregarEventosBotones() {
+        const editButtons = document.querySelectorAll(".btn.edit");
+        const deleteButtons = document.querySelectorAll(".btn.delete");
+
+        editButtons.forEach(button => {
+            button.addEventListener("click", function() {
+                const libroId = this.getAttribute("data-id");
+                const libro = data.find(libro => libro.id === parseInt(libroId));
+                if (libro) {
+                    abrirFormularioEditar(libro);
+                }
+            });
+        });
+
+        deleteButtons.forEach(button => {
+            button.addEventListener("click", function() {
+                const libroId = this.getAttribute("data-id");
+                eliminarLibro(libroId);
+            });
         });
     }
 
