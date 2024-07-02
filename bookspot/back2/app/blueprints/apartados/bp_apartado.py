@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from app import db
 from app.modelos.modelo_apartado import Apartado, DetallesApartado
 from app.modelos.modelo_movimiento import Movimiento, TipoMovimiento, DetallesMovimiento
@@ -25,7 +25,9 @@ def crear_apartado():
         ApartadoRequestSchema().load(request_data)
         
         # Obtener datos de la solicitud
-        id_usuario = request_data.get('id_usuario')
+        id_usuario = session.get('usuario_id')
+        if id_usuario is None:
+            return jsonify({"error": "Usuario no autenticado"}), 401
         fecha_limite = request_data.get('fecha_limite')
         monto = request_data.get('monto')
         nombre_acreedor = request_data.get('nombre_acreedor')
@@ -274,7 +276,9 @@ def modificar_apartado():
     try:
         # Obtener datos del apartado
         id_apartado = request_data.get('id_apartado')
-        id_usuario = request_data.get('id_usuario')
+        id_usuario = session.get('usuario_id')
+        if id_usuario is None:
+            return jsonify({"error": "Usuario no autenticado"}), 401
         fecha_limite = request_data.get('fecha_limite')
         monto = request_data.get('monto')
         nombre_acreedor = request_data.get('nombre_acreedor')
@@ -315,3 +319,12 @@ def modificar_apartado():
     except Exception as e:
         db.session.rollback()  # Deshacer cualquier cambio en caso de error
         return jsonify({"error": str(e)}), 500
+    
+
+@apartados_bp.route('/obtener_apartado/', methods=['GET'])
+@requiere_vendedor
+def obtener_apartado(id_apartado):
+    apartado = Apartado.query.get(id_apartado)
+    if apartado is None:
+        return jsonify({"error": "Apartado not found"}), 404
+    return jsonify(ApartadoResponseSchema().dump(apartado)), 200

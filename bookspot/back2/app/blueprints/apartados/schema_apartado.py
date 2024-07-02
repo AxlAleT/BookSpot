@@ -6,7 +6,6 @@ class LibroItemSchema(Schema):
     precio_apartado = fields.Float(required=True)
 
 class ApartadoRequestSchema(Schema):
-    id_usuario = fields.Int(required=True)
     fecha_limite = fields.DateTime(required=True)
     monto = fields.Float(required=True)
     nombre_acreedor = fields.Str(required=True)
