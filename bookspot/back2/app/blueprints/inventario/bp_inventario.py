@@ -5,13 +5,14 @@ from app.modelos.modelo_movimiento import Movimiento, DetallesMovimiento, TipoMo
 from app.excepciones.excepciones_libro import InvalidRequestException, BookNotFoundException
 import datetime
 from .schema_inventario import AddLibroSchema, EditLibroSchema, SearchLibroSchema
-
+from app.auth.auth import requiere_almacenista
 
 inventario_bp = Blueprint('inventario', __name__)
 
 
 # Definir el endpoint para obtener libros
 @inventario_bp.route('/obtener_libros/', methods=['GET'])
+@requiere_almacenista
 def obtener_libros():
     numero = request.args.get('numero', type=int)
     
@@ -38,6 +39,7 @@ def obtener_libros():
 
 # Definir el endpoint para agregar libro
 @inventario_bp.route('/agregar_libro/', methods=['POST'])
+@requiere_almacenista
 def agregar_libro():
     request_data = request.json
     
@@ -101,6 +103,7 @@ def agregar_libro():
 
 # Endpoint para editar libro
 @inventario_bp.route('/editar_libro/', methods=['PUT'])
+@requiere_almacenista
 def editar_libro():
     request_data = request.json
     
@@ -143,6 +146,7 @@ def editar_libro():
 
 # Endpoint para buscar libros por palabra clave en el título
 @inventario_bp.route('/buscar_libro/', methods=['GET'])
+@requiere_almacenista
 def buscar_libro():
     keyword = request.args.get('keyword', type=str)
     

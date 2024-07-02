@@ -8,10 +8,12 @@ from .schema_apartado import ApartadoRequestSchema, ApartadoResponseSchema
 from app.excepciones.excepciones_libro import InvalidRequestException, BookNotFoundException, NotEnoughStockException
 from config import negocioConfig as Config
 import datetime
+from app.auth.auth import requiere_vendedor
 
 apartados_bp = Blueprint('apartados', __name__)
 
 @apartados_bp.route('/crear_apartado/', methods=['POST'])
+@requiere_vendedor
 def crear_apartado():
     request_data = request.json
     
@@ -124,6 +126,7 @@ def validate_request(request_data):
 
 
 @apartados_bp.route('/concretar_venta_apartado/', methods=['POST'])
+@requiere_vendedor
 def concretar_venta_apartado():
     request_data = request.json
 
@@ -199,6 +202,7 @@ def concretar_venta_apartado():
 
 
 @apartados_bp.route('/cancelar_apartado/', methods=['DELETE'])
+@requiere_vendedor
 def cancelar_apartado():
     request_data = request.json
 
@@ -260,6 +264,7 @@ def cancelar_apartado():
     
 
 @apartados_bp.route('/modificar_apartado/', methods=['PATCH'])
+@requiere_vendedor
 def modificar_apartado():
     request_data = request.json
 

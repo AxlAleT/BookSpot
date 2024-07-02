@@ -7,10 +7,12 @@ from app.modelos.modelo_movimiento import Movimiento, DetallesMovimiento, TipoMo
 from app.excepciones.excepciones_libro import InvalidRequestException, BookNotFoundException, NotEnoughStockException
 from app.modelos.modelo_venta import Venta, DetallesVenta
 from app.modelos.modelo_metodo_pago import MetodoPago
+from app.auth.auth import requiere_vendedor
 
 ventas_bp = Blueprint('ventas', __name__)
 
 @ventas_bp.route('/get_libro/', methods=['POST'])
+@requiere_vendedor
 def get_libro():
     request_data = request.json
     
@@ -46,6 +48,7 @@ def get_libro():
     
 
 @ventas_bp.route('/completar/', methods=['PATCH'])
+@requiere_vendedor
 def completar():
     request_data = request.json
     
