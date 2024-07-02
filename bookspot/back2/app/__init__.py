@@ -35,5 +35,8 @@ def create_app():
     @app.route('/')
     def index():
         return render_template('login.html')
-
+    @app.route('/vendedor/ventas.html')
+    def vendedor():
+        return render_template('ventas.html')
+    
     return app

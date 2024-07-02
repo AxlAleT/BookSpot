@@ -18,7 +18,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ correo_electronico: correoElectronico, password: password })
             });
 
-            if (!response.ok) {
+            if (response.ok) {
+                const data = await response.json(); // Parsear la respuesta JSON
+                let redirectTo = ''; // Inicializar la variable de redirección
+            
+                // Determinar la redirección basada en el id_grupo
+                switch (data.usuario.id_grupo) {
+                    case 1:
+                        redirectTo = 'admin/index.html';
+                        break;
+                    case 2:
+                        redirectTo = 'vendedor/ventas.html';
+                        break;
+                    case 3:
+                        redirectTo = 'almacenista/index.html';
+                        break;
+                    default:
+                        console.error('Grupo de usuario no reconocido');
+                        return; // Salir si el id_grupo no es reconocido
+                }
+            
+                // Redireccionar al usuario a la página correspondiente
+                window.location.href = redirectTo;
+            } else  {
                 // Solo intentar analizar como JSON si hay contenido
                 if (response.headers.get("content-length") !== "0") {
                     const errorData = await response.json();
