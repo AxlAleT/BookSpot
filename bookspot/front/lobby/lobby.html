@@ -138,7 +138,31 @@
         </div>
         <div id="roles" class="section">
             <h1>Roles y Permisos</h1>
-            <!-- Contenido de la sección de roles y permisos -->
+            <div class="container">
+                <h2>Agregar Nuevo Rol</h2>
+                <form id="form-agregar-rol">
+                    <label for="nombre-rol">Nombre del Rol:</label>
+                    <input type="text" id="nombre-rol" name="nombre-rol" required>
+                    <h3>Asignar Permisos</h3>
+                    <div class="permisos">
+                        <label>
+                            <input type="checkbox" name="permisos[]" value="ventas">
+                            Ventas
+                        </label>
+                        <label>
+                            <input type="checkbox" name="permisos[]" value="inventario">
+                            Inventario
+                        </label>
+                        <label>
+                            <input type="checkbox" name="permisos[]" value="reportes">
+                            Reportes
+                        </label>
+                        <!-- Agregar más permisos según sea necesario -->
+                    </div>
+                    <button type="submit" class="btn">Agregar Rol</button>
+                </form>
+            </div>
+        </div>
         </div>
         <div id="informes" class="section">
             <h1>Informes</h1>
