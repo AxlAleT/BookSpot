@@ -31,8 +31,6 @@ def create_app():
     app.register_blueprint(ventas_bp, url_prefix='/ventas')
     from app.blueprints.inventario.bp_inventario import inventario_bp
     app.register_blueprint(inventario_bp, url_prefix='/inventario')
-    from app.blueprints.reportes import bp_reportes
-    app.register_blueprint(bp_reportes, url_prefix='/reportes')
 
     @app.route('/')
     def index():
