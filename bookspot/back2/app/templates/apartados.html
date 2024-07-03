@@ -35,6 +35,9 @@
                 <button data-view="apartado-form" class="selection-button active" id="Select-Apartado">Apartado</button>
             </div>
 
+            <h1>Apartado</h1>
+
+
             <nav>
                 <button id="btn-crear">Crear Apartado</button>
                 <button id="btn-concretar">Concretar Venta</button>
@@ -42,9 +45,10 @@
                 <button id="btn-modificar">Modificar Apartado</button>
             </nav>
 
+
             <div id="crear-apartado">
                 <div id="venta-form" class="view active">
-                    <h1>Apartado</h1>
+                    
                     <div class="container-fluid">
                         <br><br>
                         <!-- Contenedor principal -->
@@ -97,6 +101,16 @@
                     </div>
                 </div>
             </div>
+
+            <div id="concretar-venta">
+            </div>
+
+            <div id="cancelar-apartado">
+            </div>
+
+            <div id="modificar-apartado">
+            </div>
+
 
         </div>
     <script src="{{ url_for('static', filename='vendedor/script.js') }}"></script>
