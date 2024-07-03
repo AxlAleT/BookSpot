@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Inicial</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='vendedor/lobby.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='vendedor/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="icon" href="{{ url_for('static', filename='vendedor/favicon.ico') }}" type="image/x-icon">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Página Inicial</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='vendedor/lobby.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='vendedor/style.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="icon" href="{{ url_for('static', filename='vendedor/favicon.ico') }}" type="image/x-icon">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <!-- Incluir jQuery -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <!-- Scripts de Bootstrap -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="{{ url_for('static', filename='inventario/inventario.js') }}"></script>
+    </head>
 <body>
     <div class="sidebar">
         <div class="profile">
@@ -26,8 +33,90 @@
         </ul>
     </div>
     <div class="main-content">
-        
+        <!-- Botón para abrir el modal de agregar libro -->
+        <div class="container mt-3">
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#agregarLibroModal">
+                        Añadir Nuevo Libro
+                    </button>
+                </div>
+            </div>
+        </div>
 
+        <div class="container mt-5">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Precio</th>
+                        <th>Cantidad Disponible</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Ejemplo de Libro</td>
+                        <td>$19.99</td>
+                        <td>100</td>
+                        <td><button class="btn btn-primary">Editar</button></td>
+                    </tr>
+                    <!-- Más filas se añadirán aquí dinámicamente con JS -->
+                </tbody>
+            </table>
+        </div>
 
+                <!-- Modal para agregar libro -->
+        <div class="modal fade" id="agregarLibroModal" tabindex="-1" aria-labelledby="agregarLibroModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="agregarLibroModalLabel">Agregar Libro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                <form id="agregarLibroForm">
+                    <div class="form-group">
+                    <label for="tituloLibro">Título</label>
+                    <input type="text" class="form-control" id="tituloLibro" name="titulo" required>
+                    </div>
+                    <div class="form-group">
+                    <label for="precioLibro">Precio</label>
+                    <input type="number" step="0.01" class="form-control" id="precioLibro" name="precio" required>
+                    </div>
+                    <div class="form-group">
+                    <label for="cantidadLibro">Cantidad</label>
+                    <input type="number" class="form-control" id="cantidadLibro" name="cantidad" required>
+                    </div>
+                </form>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="submit" form="agregarLibroForm" class="btn btn-primary">Agregar Libro</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="container mt-5">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                    <li class="page-item"><a class="page-link" href="#">6</a></li>
+                    <li class="page-item"><a class="page-link" href="#">7</a></li>
+                    <li class="page-item"><a class="page-link" href="#">8</a></li>
+                    <li class="page-item"><a class="page-link" href="#">9</a></li>
+                    <li class="page-item"><a class="page-link" href="#">10</a></li>
+                </ul>
+            </nav>
+        </div>
 </body>
 </html>
