@@ -1,39 +1,33 @@
-from flask import Blueprint, current_app
+from flask import Blueprint, jsonify
+from app import db
+from modelos.modelo_movimiento import Movimiento
+from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-import os
-from datetime import datetime
-from modelos.modelo_movimiento import Movimiento  # Asegúrate de ajustar los imports según la estructura de tu proyecto
+import datetime
 
-reportes_blueprint = Blueprint('reportes', __name__, url_prefix='/reportes')
+bp_reporte = Blueprint('bp_reporte', __name__, url_prefix='/reporte')
 
-def get_next_report_number():
-    report_folder = os.path.join(current_app.root_path, 'static')
-    reports = [f for f in os.listdir(report_folder) if f.startswith('reportemovimiento') and f.endswith('.pdf')]
-    max_number = 0
-    for report in reports:
-        parts = report.replace('reportemovimiento', '').replace('.pdf', '')
-        if parts.isdigit():
-            number = int(parts)
-            if number > max_number:
-                max_number = number
-    return max_number + 1
-
-@reportes_blueprint.route('/movimientos_pdf', methods=['GET'])
-def generar_reporte_movimientos():
-    report_number = get_next_report_number()
-    pdf_filename = f"reportemovimiento{report_number}.pdf"
-    pdf_path = os.path.join(current_app.root_path, 'static', pdf_filename)
-
-    c = canvas.Canvas(pdf_path)
-    c.drawString(100, 800, "Reporte de Movimientos")
+@bp_reporte.route('/movimientos', methods=['GET'])
+def reporte_movimientos():
+    movimientos = Movimiento.query.all()
+    filename = f"movimientos_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.pdf"
+    path = f"static/{filename}"
     
-    y = 780
+    c = canvas.Canvas(path, pagesize=letter)
+    width, height = letter  # keep for later
+    
+    c.drawString(100, height - 50, "Reporte de Movimientos")
+    y = height - 70
+    
     for movimiento in movimientos:
-        c.drawString(100, y, f"ID: {movimiento.id_movimiento}, Tipo: {movimiento.tipo_movimiento.nombre}, Fecha: {movimiento.fecha_hora}")
+        fecha = movimiento.fecha_hora.strftime("%Y-%m-%d %H:%M:%S") if movimiento.fecha_hora else "Sin Fecha"
+        tipo_movimiento = movimiento.tipo_movimiento.nombre if movimiento.tipo_movimiento else "Sin Tipo"
+        c.drawString(50, y, f"ID: {movimiento.id_movimiento} - Fecha: {fecha} - Tipo: {tipo_movimiento}")
         y -= 20
-        for detalle in movimiento.detalles:
-            c.drawString(120, y, f"Libro ID: {detalle.id_libro}, Cantidad: {detalle.cantidad}")
-            y -= 20
-
+    
     c.save()
-    return {'filename': pdf_filename}
+
+    return jsonify({"message": "PDF generado", "filename": filename})
+
+
+
