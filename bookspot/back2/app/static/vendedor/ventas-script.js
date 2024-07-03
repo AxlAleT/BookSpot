@@ -15,13 +15,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let products = [];
 
+    const quantityInputs = document.querySelectorAll('.quantity-input');
+
+    quantityInputs.forEach(input => {
+        input.addEventListener('input', calcularMonto);
+    });
+    
+
     function calcularMonto() {
         const montoInput = document.getElementById('monto');
+
+                // 1. Obtener todos los inputs de cantidad
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+
+        // Función para calcular y actualizar el total
+        function updateTotal() {
         let total = 0;
-        products.forEach(product => {
-            total += product.precio * product.cantidad;
+        // 3. Calcular el total
+        quantityInputs.forEach(input => {
+            const row = input.closest('tr'); // Encuentra la fila del input
+            const price = parseFloat(row.cells[2].textContent); // Obtiene el precio de la fila
+            const quantity = parseInt(input.value); // Obtiene la cantidad del input
+            total += price * quantity; // Suma al total
         });
-        montoInput.value = total.toFixed(2);
+
+        // 4. Actualizar el valor del input montoInput
+        montoInput.value = total.toFixed(2); // Asegura dos decimales en el total
+        }
+
+        // 2. Añadir un evento 'change' a cada input de cantidad
+        quantityInputs.forEach(input => {
+        input.addEventListener('change', updateTotal);
+        });
+
+        // Llama a updateTotal inicialmente para establecer el total inicial
+        updateTotal();
     }
     
     function renderProducts() {
