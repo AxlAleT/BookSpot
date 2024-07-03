@@ -1,46 +1,55 @@
+from flask import Blueprint, request, jsonify
 import os
+from datetime import datetime
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-from datetime import datetime
-from modelos.modelo_movimiento import Movimiento  # Ajusta las importaciones según tu proyecto
-from modelos.modelo_venta import Venta
+from marshmallow import ValidationError
 
-def fetch_data():
-    movimientos = Movimiento.query.all()
-    ventas = Venta.query.all()
-    return movimientos, ventas
+# Asegúrate de que la importación sea correcta
+from schema_reporte import EntradaDatosSchema
 
-def generate_pdf(movimientos, ventas):
-    current_dir = os.path.dirname(__file__)  # Obtiene el directorio actual donde está este script
-    report_path = os.path.join(current_dir, "reporte_movimientos_y_ventas.pdf")  # Construye la ruta completa
-    
-    c = canvas.Canvas(report_path, pagesize=letter)
-    width, height = letter
+reportes_bp = Blueprint('reportes', __name__)
 
-    c.drawString(30, height - 30, f'Reporte generado el: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
-    
-    y = height - 50
-    c.drawString(30, y, 'Movimientos:')
-    y -= 20
-    for movimiento in movimientos:
-        c.drawString(30, y, f'ID: {movimiento.id_movimiento}, Tipo: {movimiento.tipo_movimiento.nombre}, Fecha: {movimiento.fecha_hora}')
+@reportes_bp.route('/ingresar_datos', methods=['POST'])
+def ingresar_datos_y_generar_reporte():
+    try:
+        # Validar la solicitud con el esquema de EntradaDatosSchema
+        datos = EntradaDatosSchema().load(request.get_json())  # Asegúrate de usar get_json() para obtener el JSON de la solicitud
+        movimientos = datos['movimientos']
+        ventas = datos['ventas']
+
+        # Generación del reporte PDF
+        report_path = os.path.join(os.path.dirname(__file__), f"reporte_{datetime.now().strftime('%Y%m%d%H%M%S')}.pdf")
+        c = canvas.Canvas(report_path, pagesize=letter)
+        width, height = letter
+
+        y = height - 30
+        c.drawString(30, y, f'Reporte generado el: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
         y -= 20
-        if y < 100:
-            c.showPage()
-            y = height - 30
-    
-    y -= 20
-    c.drawString(30, y, 'Ventas:')
-    y -= 20
-    for venta in ventas:
-        c.drawString(30, y, f'ID: {venta.id_venta}, Usuario ID: {venta.id_usuario}, Monto: {venta.monto}, Fecha: {venta.fecha_venta}')
+
+        # Detalles de los movimientos
+        c.drawString(30, y, 'Movimientos:')
         y -= 20
-        if y < 100:
-            c.showPage()
-            y = height - 30
+        for movimiento in movimientos:
+            c.drawString(30, y, f'Tipo: {movimiento["id_tipo_movimiento"]}, Fecha: {movimiento["fecha_hora"]}, Cantidad: {movimiento["cantidad"]}')
+            y -= 20
+            if y < 100:
+                c.showPage()
+                y = height - 30
 
-    c.save()
+        # Detalles de las ventas
+        y -= 20
+        c.drawString(30, y, 'Ventas:')
+        y -= 20
+        for venta in ventas:
+            c.drawString(30, y, f'Libro ID: {venta["id_libro"]}, Cantidad: {venta["cantidad"]}, Precio: ${venta["precio_venta"]}, Fecha: {venta["fecha_venta"]}')
+            y -= 20
+            if y < 100:
+                c.showPage()
+                y = height - 30
 
-def main():
-    movimientos, ventas = fetch_data()
-    generate_pdf(movimientos, ventas)
+        c.save()
+        return jsonify({"message": f"Datos ingresados y reporte generado correctamente. Guardado en {report_path}"}), 200
+        
+    except ValidationError as e:
+        return jsonify({'error': e.messages}), 400

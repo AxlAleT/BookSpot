@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, validate, includes
+from marshmallow import Schema, fields, validate
 
 class MovimientoSchema(Schema):
     id_tipo_movimiento = fields.Int(required=True)
@@ -14,4 +14,5 @@ class VentaSchema(Schema):
 class EntradaDatosSchema(Schema):
     movimientos = fields.List(fields.Nested(MovimientoSchema), required=True)
     ventas = fields.List(fields.Nested(VentaSchema), required=True)
+
 
