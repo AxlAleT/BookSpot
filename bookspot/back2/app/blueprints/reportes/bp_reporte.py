@@ -1,13 +1,13 @@
 from flask import Blueprint, jsonify
 from app import db
-from modelos.modelo_movimiento import Movimiento
+from app.modelos.modelo_movimiento import Movimiento
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import datetime
 
-bp_reporte = Blueprint('bp_reporte', __name__, url_prefix='/reporte')
+reporte_bp = Blueprint('bp_reporte', __name__, url_prefix='/reporte')
 
-@bp_reporte.route('/movimientos', methods=['GET'])
+@reporte_bp.route('/movimientos', methods=['GET'])
 def reporte_movimientos():
     movimientos = Movimiento.query.all()
     filename = f"movimientos_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.pdf"
