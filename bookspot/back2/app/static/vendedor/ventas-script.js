@@ -171,4 +171,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     renderProducts();
+
+
+     // Encuentra el botón de cerrar sesión por su clase
+     const logoutButton = document.querySelector('.logout-button');
+
+     // Asegúrate de que el botón existe para evitar errores
+     if (logoutButton) {
+         logoutButton.addEventListener('click', function(event) {
+             // Previene el comportamiento predeterminado del enlace
+             event.preventDefault();
+ 
+             // Envía una solicitud fetch a la ruta de cierre de sesión
+             fetch('/auth/logout/', {
+                 method: 'POST', // Método POST como se define en el backend
+                 headers: {
+                     // Añade cualquier encabezado necesario aquí
+                     // Por ejemplo, 'Content-Type': 'application/json'
+                     // Si usas CSRF tokens, asegúrate de incluirlo también
+                 },
+                 // No es necesario enviar un cuerpo (body) para esta solicitud,
+                 // a menos que tu backend lo requiera
+             })
+             .then(response => {
+                 if (response.ok) {
+                     // Si el cierre de sesión fue exitoso, redirige al usuario al directorio raíz
+                     window.location.href = '/';
+                 } else {
+                     // Maneja los errores, por ejemplo, mostrando un mensaje al usuario
+                     console.error('Error al cerrar sesión');
+                 }
+             })
+             .catch(error => {
+                 // Maneja errores de red
+                 console.error('Error de red al intentar cerrar sesión:', error);
+             });
+         });
+     }
+     
 });

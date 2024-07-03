@@ -105,5 +105,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mostrar la sección seleccionada
     document.getElementById(idSeccion).style.display = 'block';
   }
+  
 });
 
