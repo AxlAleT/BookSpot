@@ -1,4 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    document.getElementById('Select-Ventas').addEventListener('click', function() {
+        window.location.href = 'http://127.0.0.1:5000/vendedor/ventas.html';
+      });
+      
+    document.getElementById('Select-Apartado').addEventListener('click', function() {
+        window.location.href = 'http://127.0.0.1:5000/vendedor/apartados.html';
+    });
+
     const productTableBody = document.getElementById('product-table-body');
     const completeSaleButton = document.getElementById('complete-sale');
     const productCodeInput = document.getElementById('product-code');

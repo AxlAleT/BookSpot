@@ -31,6 +31,8 @@ def create_app():
     app.register_blueprint(ventas_bp, url_prefix='/ventas')
     from app.blueprints.inventario.bp_inventario import inventario_bp
     app.register_blueprint(inventario_bp, url_prefix='/inventario')
+    from app.blueprints.apartados.bp_apartado import apartados_bp
+    app.register_blueprint(apartados_bp, url_prefix='/apartados')
     #from app.blueprints.reportes import bp_reportes
     #app.register_blueprint(bp_reportes, url_prefix='/reportes')
 

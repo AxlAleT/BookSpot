@@ -6,9 +6,13 @@ from app.modelos.modelo_libro import Libro
 from app.modelos.modelo_venta import Venta, DetallesVenta
 from .schema_apartado import ApartadoRequestSchema, ApartadoResponseSchema
 from app.excepciones.excepciones_libro import InvalidRequestException, BookNotFoundException, NotEnoughStockException
-from config import negocioConfig as Config
 import datetime
 from app.auth.auth import requiere_vendedor
+from config import negocioConfig
+from dateutil import parser
+
+
+Config = negocioConfig.get_instance()
 
 apartados_bp = Blueprint('apartados', __name__)
 
@@ -28,7 +32,11 @@ def crear_apartado():
         id_usuario = session.get('usuario_id')
         if id_usuario is None:
             return jsonify({"error": "Usuario no autenticado"}), 401
-        fecha_limite = request_data.get('fecha_limite')
+        # Convertir fecha_limite de string a datetime
+        fecha_actual = datetime.date.today()
+        # Sumar Config.limite_dias a la fecha actual para obtener fecha_limite
+        fecha_limite = fecha_actual + datetime.timedelta(days=Config.DIAS_LIMITE)
+
         monto = request_data.get('monto')
         nombre_acreedor = request_data.get('nombre_acreedor')
         items = request_data.get('items')

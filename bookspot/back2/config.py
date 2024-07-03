@@ -105,6 +105,7 @@ class negocioConfig:
             raise Exception("This class is a singleton!")
         else:
             self.APARTADO_PORCENTAJE = 0.3
+            self.DIAS_LIMITE = 15
             negocioConfig._instance = self
 
 negocio_config = negocioConfig()

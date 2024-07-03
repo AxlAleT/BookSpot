@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('payment-method').style.display = 'none';
+  document.getElementById('payment-method-label').style.display = 'none';
 
-    document.getElementById('boton-crear-apartado').addEventListener('click', function() {
-        // Suponiendo que los valores de fecha_limite, monto y nombre_acreedor se recogen de inputs
-        const fecha_limite = document.getElementById('fecha_limite').value;
+    document.getElementById('completar-apartado').addEventListener('click', function() {
         const monto = parseFloat(document.getElementById('monto').value);
-        const nombre_acreedor = document.getElementById('nombre_acreedor').value;
+        const nombre_acreedor = document.getElementById('nombre-acreedor').value;
       
         const productTableBody = document.getElementById('product-table-body');
         const rows = productTableBody.querySelectorAll('tr');
@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       
         const apartadoData = {
-          fecha_limite,
           monto,
           nombre_acreedor,
           items
@@ -35,28 +34,23 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function crearApartado(apartadoData) {
-  // Validar los datos del apartado con el esquema definido
   const esquemaApartado = {
-    fecha_limite: new Date(apartadoData.fecha_limite), // Asegurarse de que es una fecha válida
-    monto: parseFloat(apartadoData.monto), // Convertir a float para validar el monto
+    monto: parseFloat(apartadoData.monto),
     nombre_acreedor: apartadoData.nombre_acreedor,
     items: apartadoData.items.map(item => ({
-      id_libro: parseInt(item.id_libro), // Convertir a entero el ID del libro
-      cantidad: parseInt(item.cantidad), // Convertir a entero la cantidad
-      precio_apartado: parseFloat(item.precio_apartado) // Convertir a float el precio
+      id_libro: parseInt(item.id_libro),
+      cantidad: parseInt(item.cantidad),
+      precio_apartado: parseFloat(item.precio_apartado)
     }))
   };
 
-  // Verificar si todos los campos requeridos están presentes y son válidos
-  // Esta es una simplificación. En un caso real, se debería usar una librería como Joi o Yup para validar esquemas
-  if (!esquemaApartado.fecha_limite || isNaN(esquemaApartado.monto) || !esquemaApartado.nombre_acreedor || !Array.isArray(esquemaApartado.items) || esquemaApartado.items.some(item => isNaN(item.id_libro) || isNaN(item.cantidad) || isNaN(item.precio_apartado))) {
+  if ( isNaN(esquemaApartado.monto) || !esquemaApartado.nombre_acreedor || !Array.isArray(esquemaApartado.items) || esquemaApartado.items.some(item => isNaN(item.id_libro) || isNaN(item.cantidad) || isNaN(item.precio_apartado))) {
     console.error('Los datos del apartado son inválidos');
     return;
   }
 
   try {
-    // Enviar la solicitud al servidor
-    const response = await fetch('/ruta/a/crear_apartado', { // Reemplazar '/ruta/a/crear_apartado' con la ruta real del servidor
+    const response = await fetch('http://127.0.0.1:5000/apartados/crear_apartado/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -70,11 +64,15 @@ async function crearApartado(apartadoData) {
 
     const responseData = await response.json();
     console.log('Apartado creado con éxito:', responseData);
+
+    // Verificar si la respuesta incluye un id_apartado para confirmar el éxito
+    if (responseData.id_apartado) {
+      alert('Apartado creado con éxito');
+    }
   } catch (error) {
     console.error('Error al crear el apartado:', error);
   }
 }
-
 
 // document.addEventListener('DOMContentLoaded', () => {
 //     const formSections = document.querySelectorAll('.form-section');
