@@ -6,6 +6,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let products = [];
 
+    function calcularMonto() {
+        const montoInput = document.getElementById('monto');
+        let total = 0;
+        products.forEach(product => {
+            total += product.precio * product.cantidad;
+        });
+        montoInput.value = total.toFixed(2);
+    }
+    
     function renderProducts() {
         productTableBody.innerHTML = '';
         products.forEach((product, index) => {
@@ -21,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             productTableBody.appendChild(row);
         });
+        calcularMonto(); // Llamar a calcularMonto al final de renderizar los productos
     }
 
     async function fetchProductData(id_libro, cantidad) {

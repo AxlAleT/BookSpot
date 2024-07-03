@@ -31,8 +31,8 @@ def create_app():
     app.register_blueprint(ventas_bp, url_prefix='/ventas')
     from app.blueprints.inventario.bp_inventario import inventario_bp
     app.register_blueprint(inventario_bp, url_prefix='/inventario')
-    from app.blueprints.reportes import bp_reportes
-    app.register_blueprint(bp_reportes, url_prefix='/reportes')
+    #from app.blueprints.reportes import bp_reportes
+    #app.register_blueprint(bp_reportes, url_prefix='/reportes')
 
     @app.route('/')
     def index():
@@ -40,5 +40,8 @@ def create_app():
     @app.route('/vendedor/ventas.html')
     def vendedor():
         return render_template('ventas.html')
+    @app.route('/vendedor/apartados.html')
+    def inventario():
+        return render_template('apartados.html')
     
     return app
