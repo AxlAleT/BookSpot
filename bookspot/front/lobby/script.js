@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const precio = document.getElementById("precio").value;
         const cantidad = document.getElementById("cantidad").value;
 
-        fetch("/agregar_libro/", {
+        fetch('http://127.0.0.1:5000/inventario/agregar_libro/', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     function actualizarInventario() {
-        fetch("/obtener_libros/")
+        fetch("http://127.0.0.1:5000/inventario/obtener_libros/")
         .then(response => response.json())
         .then(data => {
             if (data.error) {
@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const precio = document.getElementById("edit-precio").value;
             const available_quantity = document.getElementById("edit-available_quantity").value;
 
-            fetch(`/editar_libro/`, {
+            fetch(`http://127.0.0.1:5000/inventario/editar_libro/`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
@@ -175,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function eliminarLibro(id) {
         if (confirm("¿Estás seguro de que quieres eliminar este libro?")) {
-            fetch(`/eliminar_libro/${id}`, {
+            fetch(`http://127.0.0.1:5000/inventario/eliminar_libro/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
@@ -198,7 +198,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     searchInput.addEventListener("input", function() {
         const searchTerm = searchInput.value.toLowerCase();
-        fetch(`/buscar_libro/?keyword=${searchTerm}`)
+        fetch(`http://127.0.0.1:5000/inventario/buscar_libro/?keyword=${searchTerm}`)
         .then(response => response.json())
         .then(data => {
             if (data.error) {
