@@ -4,6 +4,7 @@ class MovimientoSchema(Schema):
     id_tipo_movimiento = fields.Int(required=True)
     fecha_hora = fields.DateTime(required=True, format='%Y-%m-%d %H:%M:%S')
     cantidad = fields.Int(required=True, validate=validate.Range(min=1))
+    nombre_empleado = fields.Str(required=True)  # Nuevo campo
 
 class VentaSchema(Schema):
     id_libro = fields.Int(required=True)
@@ -14,5 +15,3 @@ class VentaSchema(Schema):
 class EntradaDatosSchema(Schema):
     movimientos = fields.List(fields.Nested(MovimientoSchema), required=True)
     ventas = fields.List(fields.Nested(VentaSchema), required=True)
-
-
