@@ -44,6 +44,3 @@ def generate_pdf(movimientos, ventas):
 def main():
     movimientos, ventas = fetch_data()
     generate_pdf(movimientos, ventas)
-
-if __name__ == '__main__':
-    main()
