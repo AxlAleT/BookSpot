@@ -61,7 +61,7 @@
                         <td>Ejemplo de Libro</td>
                         <td>$19.99</td>
                         <td>100</td>
-                        <td><button class="btn btn-primary">Editar</button></td>
+                        <td><button class="btn btn-primary btn-editar">Editar</button></td>
                     </tr>
                     <!-- Más filas se añadirán aquí dinámicamente con JS -->
                 </tbody>
@@ -99,6 +99,46 @@
                 <button type="submit" form="agregarLibroForm" class="btn btn-primary">Agregar Libro</button>
                 </div>
             </div>
+            </div>
+        </div>
+
+                <!-- Modal para editar libro -->
+        <div class="modal fade" id="editarLibroModal" tabindex="-1" aria-labelledby="editarLibroModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editarLibroModalLabel">Editar Libro</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editarLibroForm">
+                            <div class="form-group">
+                                <label for="idLibroEditar">ID</label>
+                                <input type="text" class="form-control" id="idLibroEditarVisual" name="idVisual" required disabled>
+                                <!-- Campo oculto para el ID real que se enviará -->
+                                <input type="hidden" id="idLibroEditar" name="id">
+                            </div>
+                            <div class="form-group">
+                                <label for="tituloLibroEditar">Título</label>
+                                <input type="text" class="form-control" id="tituloLibroEditar" name="titulo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="precioLibroEditar">Precio</label>
+                                <input type="number" step="0.01" class="form-control" id="precioLibroEditar" name="precio" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cantidadLibroEditar">Cantidad</label>
+                                <input type="number" class="form-control" id="cantidadLibroEditar" name="cantidad" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" form="editarLibroForm" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </div>
             </div>
         </div>
 

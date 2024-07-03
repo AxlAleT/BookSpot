@@ -17,9 +17,12 @@ class NotEnoughStockException(Exception):
         })
         self.response.status_code = 400
 
+from flask import jsonify
+
 class InvalidRequestException(Exception):
-    def __init__(self):
+    def __init__(self, message="InvalidRequest"):
+        super().__init__(message)  # Esto establece el mensaje de la excepción base.
         self.response = jsonify({
-            "error": "InvalidRequest",
+            "error": message,  # Usa el mensaje personalizado o el predeterminado.
         })
         self.response.status_code = 400

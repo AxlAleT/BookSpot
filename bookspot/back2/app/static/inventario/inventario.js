@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${libro.titulo}</td>
                 <td>$${libro.precio.toFixed(2)}</td>
                 <td>${libro.available_quantity}</td>
-                <td><button class="btn btn-primary">Editar</button></td>
+                <td><button class="btn btn-primary btn-editar">Editar</button></td>
             `;
             tbody.appendChild(tr);
         });
@@ -90,5 +90,65 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Error al agregar el libro. Por favor, intente de nuevo.');
         });
         fetchLibros(currentPage);
+    });
+
+
+    // Añadir evento click a cada botón de editar
+    document.querySelector('.table tbody').addEventListener('click', function(e) {
+        // Verificar si el elemento clickeado es un botón de editar
+        if (e.target.classList.contains('btn-editar')) {
+            const row = e.target.closest('tr');
+            const id = row.cells[0].textContent;
+            const titulo = row.cells[1].textContent;
+            const precio = row.cells[2].textContent.replace('$', ''); // Eliminar el símbolo de dólar
+            const cantidad = row.cells[3].textContent;
+
+            // Precargar los datos en el formulario de edición
+            document.getElementById('tituloLibroEditar').value = titulo;
+            document.getElementById('precioLibroEditar').value = precio;
+            document.getElementById('cantidadLibroEditar').value = cantidad;
+            document.getElementById('idLibroEditar').value = id; // Asegúrate de tener un campo oculto para el ID en tu formulario
+
+            // Abrir el modal de edición
+            $('#editarLibroModal').modal('show');
+        }
+    });
+
+    // Enviar los datos modificados al servidor
+    const editarLibroForm = document.getElementById('editarLibroForm');
+    editarLibroForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(editarLibroForm);
+        const libroData = {
+            id: parseInt(formData.get('id'), 10),
+            titulo: formData.get('titulo'),
+            precio: parseFloat(formData.get('precio')),
+            available_quantity: parseInt(formData.get('cantidad'), 10)
+        };
+
+        // Enviar los datos al servidor
+        fetch('/inventario/editar_libro/', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(libroData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(`Error: ${data.error}`);
+            } else {
+                $('#editarLibroModal').modal('hide'); // Cerrar el modal
+                editarLibroForm.reset(); // Limpiar el formulario
+                fetchLibros(1); // Recargar la lista de libros
+                alert('Libro modificado exitosamente.');
+            }
+        })
+        .catch(error => {
+            console.error('Error al modificar el libro:', error);
+            alert('Error al modificar el libro. Por favor, intente de nuevo.');
+        });
     });
 });
