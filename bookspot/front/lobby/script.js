@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const precio = document.getElementById("precio").value;
         const cantidad = document.getElementById("cantidad").value;
 
-        fetch("/api/inventario/agregar_libro/", {
+        fetch("/agregar_libro/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (data.error) {
                 alert("Error: " + data.error);
             } else {
-                alert("Libro agregado exitosamente.");
+                alert(data.message);
                 actualizarInventario();
                 document.getElementById("add-book-form").style.display = "none";
                 document.getElementById("form-agregar-libro").reset();
@@ -65,9 +65,13 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     function actualizarInventario() {
-        fetch("/api/inventario/obtener_libros/?numero=0")
+        fetch("/obtener_libros/")
         .then(response => response.json())
         .then(data => {
+            if (data.error) {
+                alert("Error al obtener libros: " + data.error);
+                return;
+            }
             const tableBody = document.getElementById("inventory-table-body");
             tableBody.innerHTML = "";
 
@@ -75,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const row = document.createElement("tr");
                 row.innerHTML = `
                     <td>${libro.id}</td>
-                    <td>${libro.titulo}</td>
+                    <td>${libro.título}</td>
                     <td>${libro.precio}</td>
                     <td>${libro.available_quantity}</td>
                     <td>
@@ -100,10 +104,18 @@ document.addEventListener("DOMContentLoaded", function() {
         editButtons.forEach(button => {
             button.addEventListener("click", function() {
                 const libroId = this.getAttribute("data-id");
-                const libro = data.find(libro => libro.id === parseInt(libroId));
-                if (libro) {
-                    abrirFormularioEditar(libro);
-                }
+                fetch(`/obtener_libros/?numero=${libroId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert("Error al obtener detalles del libro: " + data.error);
+                        return;
+                    }
+                    abrirFormularioEditar(data.libro);
+                })
+                .catch(error => {
+                    alert("Error: " + error);
+                });
             });
         });
 
@@ -120,31 +132,31 @@ document.addEventListener("DOMContentLoaded", function() {
         modal.style.display = "block";
 
         document.getElementById("edit-id").value = libro.id;
-        document.getElementById("edit-titulo").value = libro.titulo;
+        document.getElementById("edit-título").value = libro.título;
         document.getElementById("edit-precio").value = libro.precio;
-        document.getElementById("edit-cantidad").value = libro.available_quantity;
+        document.getElementById("edit-available_quantity").value = libro.available_quantity;
 
         document.getElementById("form-editar-libro").addEventListener("submit", function(event) {
             event.preventDefault();
 
             const id = document.getElementById("edit-id").value;
-            const titulo = document.getElementById("edit-titulo").value;
+            const título = document.getElementById("edit-título").value;
             const precio = document.getElementById("edit-precio").value;
-            const cantidad = document.getElementById("edit-cantidad").value;
+            const available_quantity = document.getElementById("edit-available_quantity").value;
 
-            fetch(`/api/inventario/editar_libro/${id}`, {
+            fetch(`/editar_libro/`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ titulo, precio, available_quantity: cantidad })
+                body: JSON.stringify({ id, título, precio, available_quantity })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
                     alert("Error: " + data.error);
                 } else {
-                    alert("Libro editado exitosamente.");
+                    alert(data.message);
                     actualizarInventario();
                     modal.style.display = "none";
                     document.getElementById("form-editar-libro").reset();
@@ -163,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function eliminarLibro(id) {
         if (confirm("¿Estás seguro de que quieres eliminar este libro?")) {
-            fetch(`/api/inventario/eliminar_libro/${id}`, {
+            fetch(`/eliminar_libro/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
@@ -184,19 +196,34 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    actualizarInventario();
-
     searchInput.addEventListener("input", function() {
         const searchTerm = searchInput.value.toLowerCase();
-        const rows = document.querySelectorAll("#inventory-table-body tr");
-
-        rows.forEach(row => {
-            const title = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
-            if (title.includes(searchTerm)) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
+        fetch(`/buscar_libro/?keyword=${searchTerm}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert("Error al buscar libros: " + data.error);
+                return;
             }
+            const tableBody = document.getElementById("inventory-table-body");
+            tableBody.innerHTML = "";
+            data.forEach(libro => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${libro.id}</td>
+                    <td>${libro.título}</td>
+                    <td>${libro.precio}</td>
+                    <td>${libro.available_quantity}</td>
+                    <td>
+                        <button class="btn edit" data-id="${libro.id}">Editar</button>
+                        <button class="btn delete" data-id="${libro.id}">Eliminar</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error("Error en la búsqueda de libros:", error);
         });
     });
 });
