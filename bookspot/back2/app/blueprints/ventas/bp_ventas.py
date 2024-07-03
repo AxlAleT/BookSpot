@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from .schema_ventas import LibroResponseSchema, VentaRequestSchema
 from app.modelos.modelo_libro import Libro
 from app import db
@@ -114,7 +114,7 @@ def completar():
         # Crear una nueva entrada en la tabla Venta
         nueva_venta = Venta(
             fecha_venta=datetime.datetime.now(datetime.timezone.utc),
-            #id_usuario=1,  # ID de usuario placeholder, actualizar según tu lógica de negocio
+            id_usuario = session.get('usuario_id'),
             monto=monto_total
         )
         db.session.add(nueva_venta)

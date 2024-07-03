@@ -45,5 +45,8 @@ def create_app():
     @app.route('/vendedor/apartados.html')
     def inventario():
         return render_template('apartados.html')
-    
+    @app.route('/almacenista/inventario.html')
+    def almacenista():
+        return render_template('inventario.html')
+
     return app

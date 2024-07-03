@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         redirectTo = 'vendedor/ventas.html';
                         break;
                     case 3:
-                        redirectTo = 'almacenista/index.html';
+                        redirectTo = '/almacenista/inventario.html';
                         break;
                     default:
                         console.error('Grupo de usuario no reconocido');
