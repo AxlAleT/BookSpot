@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                const data = await response.json(); // Parsear la respuesta JSON
+                const data = await response.json(); // Parsear la respuesta JSON una sola vez aquí
+
                 let redirectTo = ''; // Inicializar la variable de redirección
             
                 // Determinar la redirección basada en el id_grupo
@@ -40,25 +41,17 @@ document.addEventListener('DOMContentLoaded', () => {
             
                 // Redireccionar al usuario a la página correspondiente
                 window.location.href = redirectTo;
-            } else  {
+
+                // Opcional: mostrar mensaje de éxito aquí si es necesario
+                alert('Inicio de sesión exitoso');
+            } else {
                 // Solo intentar analizar como JSON si hay contenido
                 if (response.headers.get("content-length") !== "0") {
-                    const errorData = await response.json();
+                    const errorData = await response.json(); // Aquí ya no deberías leer la respuesta nuevamente
                     throw new Error(errorData.error || 'Error al iniciar sesión');
                 } else {
                     throw new Error('Error al iniciar sesión sin mensaje de error específico');
                 }
-            }
-
-            // Verificar si hay contenido antes de intentar analizarlo
-            if (response.headers.get("content-length") !== "0") {
-                const data = await response.json(); // Suponiendo que el servidor responde con datos útiles después del inicio de sesión
-                alert('Inicio de sesión exitoso');
-                // Manejar la respuesta del servidor, por ejemplo, guardar el token de sesión, redirigir, etc.
-            } else {
-                // Manejar el caso de éxito sin cuerpo
-                alert('Inicio de sesión exitoso, sin datos adicionales.');
-                // Redirigir al usuario o actualizar la UI según sea necesario
             }
         } catch (error) {
             console.error('Error al iniciar sesión:', error);

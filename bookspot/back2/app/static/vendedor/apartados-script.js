@@ -108,3 +108,38 @@ document.addEventListener('DOMContentLoaded', function() {
   
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+  // Asignar evento al botón de cancelar
+  document.getElementById('btn-cancelar').addEventListener('click', function() {
+      cancelarApartado();
+  });
+
+  // Función para cancelar el apartado
+  async function cancelarApartado() {
+      // Aquí debes obtener el ID del apartado que deseas cancelar
+      const idApartado = prompt("Ingrese el ID del apartado que desea cancelar:");
+
+      try {
+          const response = await fetch(`http://127.0.0.1:5000/apartados/cancelar_apartado/${idApartado}`, {
+              method: 'DELETE',  // Suponiendo que DELETE es el método adecuado para cancelar
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+          });
+
+          if (!response.ok) {
+              throw new Error(`Error en la solicitud: ${response.statusText}`);
+          }
+
+          const responseData = await response.json();
+          console.log('Apartado cancelado con éxito:', responseData);
+
+          // Aquí puedes manejar cómo actualizar la interfaz después de cancelar
+          alert('Apartado cancelado con éxito');
+      } catch (error) {
+          console.error('Error al cancelar el apartado:', error);
+          alert('Error al cancelar el apartado. Consulte la consola para más detalles.');
+      }
+  }
+});
+
