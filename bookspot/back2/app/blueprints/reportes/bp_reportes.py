@@ -1,55 +1,37 @@
-from flask import Blueprint, request, jsonify
-import os
-from datetime import datetime
+from flask import Blueprint, jsonify, current_app
+from app import db
+from app.modelos.modelo_venta import Venta
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-from marshmallow import ValidationError
+import datetime
+import os
 
-# Asegúrate de que la importación sea correcta
-from schema_reporte import EntradaDatosSchema
+reporte_bp = Blueprint('bp_reporte', __name__, url_prefix='/reporte')
 
-reportes_bp = Blueprint('reportes', __name__)
+def generar_reporte_ventas(id_venta):
+    venta = Venta.query.get(id_venta)
+    if not venta:
+        current_app.logger.debug("Venta no encontrada")
+        return None
 
-@reportes_bp.route('/ingresar_datos', methods=['POST'])
-def ingresar_datos_y_generar_reporte():
-    try:
-        # Validar la solicitud con el esquema de EntradaDatosSchema
-        datos = EntradaDatosSchema().load(request.get_json())  # Asegúrate de usar get_json() para obtener el JSON de la solicitud
-        movimientos = datos['movimientos']
-        ventas = datos['ventas']
+    pdf_folder = os.path.join(current_app.root_path, 'pdfs')
+    if not os.path.exists(pdf_folder):
+        os.makedirs(pdf_folder)
+        current_app.logger.debug(f"Created folder: {pdf_folder}")
 
-        # Generación del reporte PDF
-        report_path = os.path.join(os.path.dirname(__file__), f"reporte_{datetime.now().strftime('%Y%m%d%H%M%S')}.pdf")
-        c = canvas.Canvas(report_path, pagesize=letter)
-        width, height = letter
+    filename = f"venta_{venta.id_venta}_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.pdf"
+    path = os.path.join(pdf_folder, filename)
+    current_app.logger.debug(f"Saving PDF at {path}...")
 
-        y = height - 30
-        c.drawString(30, y, f'Reporte generado el: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
-        y -= 20
+    c = canvas.Canvas(path, pagesize=letter)
+    width, height = letter
 
-        # Detalles de los movimientos
-        c.drawString(30, y, 'Movimientos:')
-        y -= 20
-        for movimiento in movimientos:
-            c.drawString(30, y, f'Tipo: {movimiento["id_tipo_movimiento"]}, Fecha: {movimiento["fecha_hora"]}, Cantidad: {movimiento["cantidad"]}')
-            y -= 20
-            if y < 100:
-                c.showPage()
-                y = height - 30
+    c.drawString(100, height - 50, "Reporte de Venta Individual")
+    y = height - 70
 
-        # Detalles de las ventas
-        y -= 20
-        c.drawString(30, y, 'Ventas:')
-        y -= 20
-        for venta in ventas:
-            c.drawString(30, y, f'Libro ID: {venta["id_libro"]}, Cantidad: {venta["cantidad"]}, Precio: ${venta["precio_venta"]}, Fecha: {venta["fecha_venta"]}')
-            y -= 20
-            if y < 100:
-                c.showPage()
-                y = height - 30
+    fecha = venta.fecha_venta.strftime("%Y-%m-%d %H:%M:%S") if venta.fecha_venta else "Sin Fecha"
+    detalles = "\n".join([f"Libro ID: {detalle.libro_id}, Cantidad: {detalle.cantidad}, Precio: ${detalle.precio_venta}" for detalle in venta.detalles_venta])
+    c.drawString(50, y, f"ID Venta: {venta.id_venta} - Fecha: {fecha} - Usuario: {venta.usuario.id_usuario} - Detalles: {detalles}")
+    c.save()
 
-        c.save()
-        return jsonify({"message": f"Datos ingresados y reporte generado correctamente. Guardado en {report_path}"}), 200
-        
-    except ValidationError as e:
-        return jsonify({'error': e.messages}), 400
+    current_app.logger.debug(f"PDF generado exitosamente: {filename}")

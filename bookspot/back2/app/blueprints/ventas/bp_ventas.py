@@ -8,6 +8,7 @@ from app.excepciones.excepciones_libro import InvalidRequestException, BookNotFo
 from app.modelos.modelo_venta import Venta, DetallesVenta
 from app.modelos.modelo_metodo_pago import MetodoPago
 from app.auth.auth import requiere_vendedor
+from app.blueprints.reportes.bp_reportes import generar_reporte_ventas
 
 ventas_bp = Blueprint('ventas', __name__)
 
@@ -139,6 +140,8 @@ def completar():
 
         # Confirmar los cambios en la base de datos
         db.session.commit()
+        
+        generar_reporte_ventas(nueva_venta.id_venta)
         
         return jsonify({"message": "Venta completada exitosamente."}), 200
         
