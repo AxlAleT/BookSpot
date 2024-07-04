@@ -141,7 +141,8 @@ def completar():
         # Confirmar los cambios en la base de datos
         db.session.commit()
         
-        generar_reporte_ventas(nueva_venta.id_venta)
+        
+        
         
         return jsonify({"message": "Venta completada exitosamente."}), 200
         
